@@ -1,4 +1,4 @@
-use std::{fs, vec};
+use std::{vec};
 
 enum Direction {
     Left,
@@ -9,18 +9,17 @@ fn parse_line (line: String) -> (Direction, i32) {
     let (dir, value) = line.split_at(1);
     let value = value.parse::<i32>().expect("valid number");
     let direction = match dir {
-        'L' => Direction::Left
-        'R' => Direction::Right
+        "L" => Direction::Left,
+        "R" => Direction::Right,
         _ => panic!("invalid input")
-    }
+    };
     return (direction, value);
 }
 
 fn parse_input () -> Vec<(Direction, i32)> {
-    const FILE_PATH: &str = "../input/input.txt";
-    let result = fs::read_to_string(FILE_PATH).expect("file exists");
+    const PARSED_INPUT: &str = include_str!("../input/input.txt");
     let mut results = vec![];
-    for x in result.split('\n') {
+    for x in PARSED_INPUT.split('\n') {
         results.push(parse_line(x.to_string()));
     }
     return results;
