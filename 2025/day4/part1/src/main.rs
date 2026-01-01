@@ -6,8 +6,8 @@ fn main() {
     let roll_indices = grid
         .iter()
         .enumerate()
-        .flat_map(|(i, _)| {
-            grid[i]
+        .flat_map(|(i, vec)| {
+            vec
                 .iter()
                 .enumerate()
                 .filter(|(j, val)| *(*val) == '@')
