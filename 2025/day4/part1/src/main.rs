@@ -1,14 +1,3 @@
-const DIRS: [(isize, isize); 8] = [
-    (-1, -1),
-    (-1, 0),
-    (-1, 1),
-    (0, -1),
-    (0, 1),
-    (1, -1),
-    (1, 0),
-    (1, 1),
-];
-
 fn main() {
     let grid: Vec<Vec<char>> = include_str!("../input/input.txt")
         .lines()
