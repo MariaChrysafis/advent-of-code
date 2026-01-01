@@ -19,7 +19,7 @@ fn num_removable_rolls(roll_indices: Vec<(usize, usize)>) -> i32 {
     return num_removable_rolls(next_input) + to_remove.len() as i32;
 }
 fn main() {
-    let roll_indices = include_str!("../input/sample.txt")
+    let roll_indices = include_str!("../input/input.txt")
         .lines()
         .enumerate()
         .flat_map(|(i, str)| {
