@@ -3,27 +3,21 @@ use std::cmp;
 fn max_joltage(str: &str, batteries: usize) -> i64 {
     let digits: Vec<u32> = str.chars().map(|x| x.to_digit(10).unwrap()).collect();
     let mut dp: Vec<Vec<i64>> = vec![vec![0; batteries + 1]; str.len() + 1];
-    for ind in 0..str.len() + 1 {
-        for battery in 0..(batteries + 1) as usize {
-            // str[0...i], using battery many batteries
-            if battery == 0 || ind == 0 {
-                dp[ind][battery] = 0;
-            } else {
-                dp[ind][battery] = cmp::max(
-                    dp[ind - 1][battery].clone(),
-                    10 * dp[ind - 1][battery - 1] + digits[ind - 1] as i64,
-                );
-            }
+    for ind in 1..str.len() + 1 {
+        for battery in 1..(batteries + 1) as usize {
+            dp[ind][battery] = cmp::max(
+                dp[ind - 1][battery].clone(),
+                10 * dp[ind - 1][battery - 1] + digits[ind - 1] as i64,
+            );
         }
     }
     return dp[str.len()][batteries];
 }
 
 fn main() {
-    let joltages: Vec<i64> = include_str!("../input/input.txt")
+    let ans: i64 = include_str!("../input/input.txt")
         .lines()
         .map(|str| max_joltage(str, 12))
-        .collect();
-    let ans: i64 = joltages.iter().sum();
+        .sum();
     println!("{ans}");
 }
