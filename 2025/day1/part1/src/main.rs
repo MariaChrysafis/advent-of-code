@@ -23,10 +23,10 @@ fn main() {
     let input = parse_input();
     let mut current = 50;
     let mut ans = 0;
-    for x in input {
-        match x.0 {
-            Direction::Left => {current -= x.1;}
-            Direction::Right => {current += x.1}
+    for (dir, amount) in input {
+        match dir {
+            Direction::Left => {current -= amount;}
+            Direction::Right => {current += amount;}
         }
         if current.rem_euclid(100) == 0 {
             ans += 1;
