@@ -15,13 +15,13 @@ fn parse_line(line: &str) -> (Direction, i32) {
 }
 
 fn main() {
-    let input: Vec<(Direction, i32)> = include_str!("../input/input.txt")
+    let moves: Vec<(Direction, i32)> = include_str!("../input/input.txt")
         .lines()
         .map(parse_line)
         .collect();
     let mut position = 50;
     let mut count = 0;
-    for (direction, delta) in input {
+    for (direction, delta) in moves {
         position += match direction {
             Direction::Left => -delta,
             Direction::Right => delta,
