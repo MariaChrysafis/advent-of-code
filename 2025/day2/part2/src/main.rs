@@ -1,9 +1,6 @@
 fn is_valid(num: i64) -> bool {
     let str = num.to_string();
-    for length in 1..str.len() {
-        if str.len() % length != 0 {
-            continue;
-        }
+    for length in (1..str.len()).filter(|length| str.len() % length == 0) {
         if (1..str.len() / length)
             .all(|i| &str[0..length] == &str[i * length..i * length + length]) {
             return false;
