@@ -3,11 +3,17 @@ fn main() {
         .lines()
         .map(|x| x.chars().collect())
         .collect();
-    let indices = grid.iter().enumerate().flat_map(
-        |(i, _)| {
-            grid[i].iter().enumerate().filter(|(j, val)| *(*val) == '@').map(move |x| (i, x.0))
-        }
-    ).collect::<Vec<(usize, usize)>>();
+    let indices = grid
+        .iter()
+        .enumerate()
+        .flat_map(|(i, _)| {
+            grid[i]
+                .iter()
+                .enumerate()
+                .filter(|(j, val)| *(*val) == '@')
+                .map(move |x| (i, x.0))
+        })
+        .collect::<Vec<(usize, usize)>>();
     let mut ans = 0;
     for &(x1, y1) in indices.iter() {
         let mut cnt = 0;
