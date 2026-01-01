@@ -1,10 +1,7 @@
 fn main() {
-    let grid = include_str!("../input/input.txt")
+    let grid: Vec<Vec<char>> = include_str!("../input/input.txt")
         .lines()
-        .collect::<Vec<&str>>()
-        .iter()
-        .map(|x| x.to_string().chars().collect())
-        .collect::<Vec<Vec<char>>>();
+        .map(|x| x.chars().collect()).collect();
     let mut ans = 0;
     for i in 0..grid.len() {
         for j in 0..grid[i].len() {
