@@ -24,10 +24,10 @@ fn main() {
     let mut current = 50;
     let mut ans = 0;
     for (dir, amount) in input {
-        match dir {
-            Direction::Left => {current -= amount;}
-            Direction::Right => {current += amount;}
-        }
+        current += match dir {
+            Direction::Left => -amount,
+            Direction::Right => amount,
+        };
         if current.rem_euclid(100) == 0 {
             ans += 1;
         }
