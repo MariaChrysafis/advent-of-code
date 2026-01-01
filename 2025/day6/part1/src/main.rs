@@ -7,7 +7,6 @@ fn main() {
         .map(|i| {
             (0..input.len() - 1)
                 .map(|j| input[j][i].parse::<i64>().unwrap())
-                .into_iter()
                 .reduce(match input[input.len() - 1][i] {
                     "*" => |x, y| x * y,
                     "+" => |x, y| x + y,
