@@ -6,11 +6,14 @@ enum Direction {
 }
 
 fn parse_line (line: String) -> (Direction, i32) {
-    match  line.chars().next().unwrap() {
-        'L' => (Direction::Left, line[1..].parse::<i32>().unwrap()),
-        'R' => (Direction::Right, line[1..].parse::<i32>().unwrap()),
+    let (dir, value) = line.split_at(1);
+    let value = value.parse::<i32>().expect("valid number");
+    let direction = match dir {
+        'L' => Direction::Left
+        'R' => Direction::Right
         _ => panic!("invalid input")
     }
+    return (direction, value);
 }
 
 fn parse_input () -> Vec<(Direction, i32)> {
