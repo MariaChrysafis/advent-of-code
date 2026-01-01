@@ -1,12 +1,14 @@
 fn main() {
     let roll_indices = include_str!("../input/input.txt")
         .lines()
-        .enumerate().flat_map(
-            |(i, str)| {
-                str.chars().enumerate().filter(|(j, val)| *val == '@')
+        .enumerate()
+        .flat_map(|(i, str)| {
+            str.chars()
+                .enumerate()
+                .filter(|(j, val)| *val == '@')
                 .map(move |x| (i, x.0))
-            }
-        ).collect::<Vec<(usize, usize)>>();
+        })
+        .collect::<Vec<(usize, usize)>>();
     let mut ans = 0;
     for &(x1, y1) in roll_indices.iter() {
         let num_roll_neighbors = roll_indices
