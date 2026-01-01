@@ -32,5 +32,9 @@ dependencies = [
 ]
 
 [[package]]
+name = "day4-part1"
+version = "0.1.0"
+
+[[package]]
 name = "part1"
 version = "0.1.0"
