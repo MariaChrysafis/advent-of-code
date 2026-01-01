@@ -11,16 +11,11 @@ fn parse_line (line: &str) -> (Direction, i32) {
         "R" => Direction::Right,
         _ => panic!("invalid input")
     };
-    return (direction, value);
-}
-
-fn parse_input () -> Vec<(Direction, i32)> {
-    const INPUT: &str = include_str!("../input/input.txt");
-    INPUT.lines().map(parse_line).collect()
+    (direction, value)
 }
 
 fn main() {
-    let input = parse_input();
+    let input: Vec<(Direction, i32)> = include_str!("../input/input.txt").lines().map(parse_line).collect();
     let mut current = 50;
     let mut ans = 0;
     for (dir, amount) in input {
