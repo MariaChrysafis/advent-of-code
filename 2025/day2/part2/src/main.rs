@@ -1,11 +1,11 @@
-fn is_valid (num: i64) -> bool {
+fn is_valid(num: i64) -> bool {
     let str = num.to_string();
     for length in 1..str.len() {
         if str.len() % length != 0 {
             continue;
         }
-        let substr = &str[0..length];
-        let all_same = (1..str.len()/length).all(|i| substr == &str[i * length..i * length + length]);
+        let all_same = (1..str.len() / length)
+            .all(|i| &str[0..length] == &str[i * length..i * length + length]);
         if all_same {
             return false;
         }
