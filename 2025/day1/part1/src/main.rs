@@ -5,13 +5,13 @@ enum Direction {
 
 fn parse_line(line: &str) -> (Direction, i32) {
     let (dir, value) = line.split_at(1);
-    let value = value.parse::<i32>().expect("valid number");
+    let delta = value.parse::<i32>().expect("valid number");
     let direction = match dir {
         "L" => Direction::Left,
         "R" => Direction::Right,
         _ => panic!("invalid input"),
     };
-    (direction, value)
+    (direction, delta)
 }
 
 fn main() {
@@ -19,16 +19,16 @@ fn main() {
         .lines()
         .map(parse_line)
         .collect();
-    let mut current = 50;
-    let mut ans = 0;
-    for (dir, amount) in input {
-        current += match dir {
-            Direction::Left => -amount,
-            Direction::Right => amount,
+    let mut position = 50;
+    let mut count = 0;
+    for (direction, delta) in input {
+        position += match direction {
+            Direction::Left => -delta,
+            Direction::Right => delta,
         };
-        if current.rem_euclid(100) == 0 {
-            ans += 1;
+        if position.rem_euclid(100) == 0 {
+            count += 1;
         }
     }
-    println!("{ans}");
+    println!("{count}");
 }
