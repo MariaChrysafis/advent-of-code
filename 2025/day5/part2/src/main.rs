@@ -31,7 +31,7 @@ fn main() {
             .collect(),
     )
     .iter()
-    .map(|pr| pr.1 - pr.0 + 1)
+    .map(|(l, r)| r - l + 1)
     .sum();
     print!("{ans}");
 }
