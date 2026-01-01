@@ -1,7 +1,7 @@
 fn main() {
     let input: Vec<Vec<&str>> = include_str!("../input/input.txt")
         .split("\n")
-        .map(|x| x.trim().split_whitespace().collect::<Vec<&str>>())
+        .map(|x| x.trim().split_whitespace().collect())
         .collect();
     let ans: i64 = (0..input[0].len())
         .map(|i| {
