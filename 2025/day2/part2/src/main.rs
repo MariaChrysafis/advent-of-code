@@ -7,16 +7,15 @@ fn is_valid (num: i64) -> bool {
         let substr = &str[0..length];
         let mut valid = true;
         for i in 1..str.len()/length {
-            let s2 = &str[i * length..i * length + length];
-            if substr != s2 {
+            if substr != &str[i * length..i * length + length] {
                 valid = false;
             }
         }
         if valid {
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 fn main() {
@@ -28,8 +27,7 @@ fn main() {
             .split_once("-")
             .map(|(l, r)| (l.parse::<i64>().unwrap(), r.parse::<i64>().unwrap()))
             .expect("only two pairs");
-        let results = (left..=right).filter(|&i| is_valid(i));
-        count += results.sum::<i64>();
+        count += (left..=right).filter(|&i| !is_valid(i)).sum::<i64>();
     }
     println!("{count}")
 }
