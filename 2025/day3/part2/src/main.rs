@@ -2,7 +2,7 @@ use std::cmp;
 
 fn max_joltage(str: &str, batteries: usize) -> i64 {
     let digits: Vec<u32> = str.chars().map(|x| x.to_digit(10).unwrap()).collect();
-    let mut dp: Vec<Vec<i64>> = vec![vec![0; batteries + 1]; str.len() + 1];
+    let mut dp = vec![vec![0; batteries + 1]; str.len() + 1];
     for ind in 1..=str.len() {
         for battery in 1..=batteries {
             dp[ind][battery] = cmp::max(
