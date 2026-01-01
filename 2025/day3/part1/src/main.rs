@@ -4,13 +4,12 @@ fn main() {
     let input = include_str!("../input/input.txt").split("\n");
     let mut ans = 0;
     for str in input {
+        let digits: Vec<u32> = str.chars().map(|c| c.to_digit(10).unwrap()).collect();
         let mut mx = 0;
-        for i in 0..str.len() {
-            for j in 0..str.len() {
-                let digit1 = str.chars().nth(i).unwrap().to_digit(10).unwrap();
-                let digit2 = str.chars().nth(j).unwrap().to_digit(10).unwrap();
+        for i in 0..digits.len() {
+            for j in 0..digits.len() {
                 if i < j {
-                    mx = cmp::max(mx, 10 * digit1 + digit2);
+                    mx = cmp::max(mx, 10 * digits[i] + digits[j]);
                 }
             }
         }
