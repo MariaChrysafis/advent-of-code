@@ -5,13 +5,8 @@ fn is_valid (num: i64) -> bool {
             continue;
         }
         let substr = &str[0..length];
-        let mut valid = true;
-        for i in 1..str.len()/length {
-            if substr != &str[i * length..i * length + length] {
-                valid = false;
-            }
-        }
-        if valid {
+        let all_same = (1..str.len()/length).all(|i| substr == &str[i * length..i * length + length]);
+        if all_same {
             return false;
         }
     }
