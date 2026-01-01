@@ -3,6 +3,12 @@
 version = 4
 
 [[package]]
+name = "cmp"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "587e17a70c5890bc44333ab0c0d960cb2b1d952d62bfa7b7a4e21519b5b447d3"
+
+[[package]]
 name = "day1-part1"
 version = "0.1.0"
 
@@ -11,9 +17,20 @@ name = "day1-part2"
 version = "0.1.0"
 
 [[package]]
-name = "part1"
+name = "day2-part2"
 version = "0.1.0"
 
 [[package]]
-name = "part2"
+name = "day3-part1"
+version = "0.1.0"
+
+[[package]]
+name = "day3-part2"
+version = "0.1.0"
+dependencies = [
+ "cmp",
+]
+
+[[package]]
+name = "part1"
 version = "0.1.0"
