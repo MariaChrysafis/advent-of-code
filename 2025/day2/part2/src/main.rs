@@ -4,9 +4,8 @@ fn is_valid(num: i64) -> bool {
         if str.len() % length != 0 {
             continue;
         }
-        let all_same = (1..str.len() / length)
-            .all(|i| &str[0..length] == &str[i * length..i * length + length]);
-        if all_same {
+        if (1..str.len() / length)
+            .all(|i| &str[0..length] == &str[i * length..i * length + length]) {
             return false;
         }
     }
