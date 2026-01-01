@@ -1,13 +1,13 @@
 fn num_removable_rolls(roll_indices: Vec<(usize, usize)>) -> i32 {
     let mut to_remove = vec![];
     for &(x1, y1) in roll_indices.iter() {
-        let mut cnt = 0;
-        for &(x2, y2) in roll_indices.iter() {
-            if (x1 as i32 - x2 as i32).abs() <= 1 && (y1 as i32 - y2 as i32).abs() <= 1 {
-                cnt += 1;
-            }
-        }
-        if cnt <= 4 {
+        let num_roll_neighbors = roll_indices
+            .iter()
+            .filter(|&&(x2, y2)| {
+                (x1 as i32 - x2 as i32).abs() <= 1 && (y1 as i32 - y2 as i32).abs() <= 1
+            })
+            .count();
+        if num_roll_neighbors <= 4 {
             to_remove.push((x1, y1));
         }
     }
