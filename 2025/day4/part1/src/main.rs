@@ -3,7 +3,7 @@ fn main() {
         .lines()
         .map(|x| x.chars().collect())
         .collect();
-    let indices = grid
+    let roll_indices = grid
         .iter()
         .enumerate()
         .flat_map(|(i, _)| {
@@ -15,15 +15,16 @@ fn main() {
         })
         .collect::<Vec<(usize, usize)>>();
     let mut ans = 0;
-    for &(x1, y1) in indices.iter() {
-        let mut cnt = 0;
-        for &(x2, y2) in indices.iter() {
-            let dx = (x1 as i32 - x2 as i32).abs();
-            let dy = (y1 as i32 - y2 as i32).abs();
-            if -1 <= dx && dx <= 1 && -1 <= dy && dy <= 1 {
-                cnt += 1
-            }
-        }
+    for &(x1, y1) in roll_indices.iter() {
+        let cnt = roll_indices
+            .iter()
+            .filter(|(x2, y2)| {
+                let dx = (x1 as i32 - *x2 as i32).abs();
+                let dy = (y1 as i32 - *y2 as i32).abs();
+                return -1 <= dx && dx <= 1 && -1 <= dy && dy <= 1;
+            })
+            .collect::<Vec<&(usize, usize)>>()
+            .len();
         if cnt <= 4 {
             ans += 1;
         }
