@@ -6,7 +6,7 @@ fn max_joltage(str: &str, batteries: usize) -> i64 {
     for ind in 1..=str.len() {
         for battery in 1..=batteries {
             dp[ind][battery] = cmp::max(
-                dp[ind - 1][battery].clone(),
+                dp[ind - 1][battery],
                 10 * dp[ind - 1][battery - 1] + digits[ind - 1] as i64,
             );
         }
