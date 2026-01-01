@@ -23,8 +23,7 @@ fn main() {
                 let dy = (y1 as i32 - *y2 as i32).abs();
                 return -1 <= dx && dx <= 1 && -1 <= dy && dy <= 1;
             })
-            .collect::<Vec<&(usize, usize)>>()
-            .len();
+            .count();
         if cnt <= 4 {
             ans += 1;
         }
