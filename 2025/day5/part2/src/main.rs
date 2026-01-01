@@ -29,6 +29,9 @@ fn main() {
                 return (l.parse::<i64>().unwrap(), r.parse::<i64>().unwrap());
             })
             .collect(),
-    ).iter().map(|pr| pr.1 - pr.0 + 1).sum();
+    )
+    .iter()
+    .map(|pr| pr.1 - pr.0 + 1)
+    .sum();
     print!("{ans}");
 }
