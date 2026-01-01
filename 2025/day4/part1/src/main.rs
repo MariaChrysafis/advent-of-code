@@ -19,9 +19,7 @@ fn main() {
         let cnt = roll_indices
             .iter()
             .filter(|&&(x2, y2)| {
-                let dx = (x1 as i32 - x2 as i32).abs();
-                let dy = (y1 as i32 - y2 as i32).abs();
-                -1 <= dx && dx <= 1 && -1 <= dy && dy <= 1
+                (x1 as i32 - x2 as i32).abs() <= 1 && (y1 as i32 - y2 as i32).abs() <= 1
             })
             .count();
         if cnt <= 4 {
