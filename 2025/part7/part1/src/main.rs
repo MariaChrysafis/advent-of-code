@@ -13,7 +13,7 @@ fn main() {
     ]);
     let mut ans = 0;
     for row in input {
-        let new_beams: HashSet<i32> = beams
+        beams = beams
             .iter()
             .flat_map(|j| {
                 if row[*j as usize] != '^' {
@@ -25,7 +25,6 @@ fn main() {
             })
             .filter(|&x| x >= 0 && x < row.len() as i32)
             .collect();
-        beams = new_beams.into_iter().collect();
     }
     println!("{ans}")
 }
