@@ -7,7 +7,12 @@ impl Graph {
             return 0;
         }
         vis[node] = cntr;
-        self.adj[node].clone().iter().map(|&x| self.dfs(vis, x, cntr)).sum::<usize>() + 1
+        self.adj[node]
+            .clone()
+            .iter()
+            .map(|&x| self.dfs(vis, x, cntr))
+            .sum::<usize>()
+            + 1
     }
     pub fn add_edge(&mut self, u: usize, v: usize) {
         self.adj[u].push(v);
