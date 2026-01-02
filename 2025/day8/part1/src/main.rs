@@ -2,15 +2,16 @@ struct Graph {
     adj: Vec<Vec<usize>>,
 }
 impl Graph {
-    fn dfs(&mut self, vis: &mut Vec<usize>, sizes: &mut Vec<usize>, node: usize, cntr: usize) {
+    fn dfs(&mut self, vis: &mut Vec<usize>, node: usize, cntr: usize) -> usize {
         if vis[node] != 0 {
-            return;
+            return 0;
         }
-        *sizes.last_mut().unwrap() += 1;
         vis[node] = cntr;
+        let mut ans = 1;
         for x in self.adj[node].clone() {
-            self.dfs(vis, sizes, x, cntr);
+            ans += self.dfs(vis, x, cntr);
         }
+        ans
     }
     pub fn add_edge(&mut self, u: usize, v: usize) {
         self.adj[u].push(v);
@@ -20,8 +21,7 @@ impl Graph {
         let mut vis = vec![0; self.adj.len()];
         let mut sizes = Vec::new();
         for i in 0..self.adj.len() {
-            sizes.push(0);
-            self.dfs(&mut vis, &mut sizes, i, i + 1);
+            sizes.push(self.dfs(&mut vis, i, i + 1));
         }
         sizes
     }
