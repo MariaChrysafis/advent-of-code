@@ -35,24 +35,20 @@ fn distance(pos1: &[i64], pos2: &[i64]) -> i64 {
     (0..pos1.len()).map(|i| (pos1[i] - pos2[i]).pow(2)).sum()
 }
 fn main() {
-    let positions = include_str!("../input/sample.txt")
+    let positions: Vec<Vec<i64>> = include_str!("../input/sample.txt")
         .lines()
-        .map(|x| {
-            x.split(',')
-                .map(|x| x.parse::<i64>().unwrap())
-                .collect::<Vec<i64>>()
-        })
-        .collect::<Vec<Vec<i64>>>();
-    let mut distances: Vec<(usize, usize)> = vec![];
+        .map(|x| x.split(',').map(|x| x.parse::<i64>().unwrap()).collect())
+        .collect();
+    let mut edges: Vec<(usize, usize)> = vec![];
     for i in 0..positions.len() {
         for j in i + 1..positions.len() {
-            distances.push((i, j));
+            edges.push((i, j));
         }
     }
-    distances.sort_by_key(|&(i, j)| distance(&positions[j], &positions[i]));
+    edges.sort_by_key(|&(i, j)| distance(&positions[j], &positions[i]));
     const SIZE: usize = 1000;
     let mut graph = Graph::new(positions.len());
-    distances
+    edges
         .iter()
         .take(SIZE)
         .for_each(|edge| graph.add_edge(edge.0, edge.1));
