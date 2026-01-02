@@ -1,6 +1,6 @@
 use core::panic;
 
-fn solve(mut input: Vec<Vec<char>>) -> i64 {
+fn solve(input: Vec<Vec<char>>) -> i64 {
     // check if just single worksheet column
     if input[input.len() - 1].iter().filter(|&x| *x != ' ').count() == 1 {
         // find the operation
