@@ -9,8 +9,8 @@ impl Graph {
         vis[node] = true;
         self.adj[node]
             .clone()
-            .iter()
-            .map(|&x| self.dfs(vis, x))
+            .into_iter()
+            .map(|x| self.dfs(vis, x))
             .sum::<usize>()
             + 1
     }
