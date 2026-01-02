@@ -3,14 +3,12 @@ fn main() {
     let mut input = include_str!("../input/input.txt")
         .lines()
         .map(|x| x.chars().collect::<Vec<char>>());
-    let mut beams: HashSet<i32> = HashSet::from([
-        input
-            .next()
-            .unwrap()
-            .iter()
-            .position(|x| *x == 'S')
-            .unwrap() as i32,
-    ]);
+    let mut beams: HashSet<i32> = HashSet::from([input
+        .next()
+        .unwrap()
+        .iter()
+        .position(|x| *x == 'S')
+        .unwrap() as i32]);
     let mut ans = 0;
     for row in input {
         beams = beams
