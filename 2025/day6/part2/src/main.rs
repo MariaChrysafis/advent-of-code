@@ -1,6 +1,4 @@
 use core::panic;
-use std::cmp;
-use std::usize::MAX;
 
 fn solve(mut input: Vec<Vec<char>>) -> i64 {
     // trim all leading spaces
@@ -9,7 +7,7 @@ fn solve(mut input: Vec<Vec<char>>) -> i64 {
         .min()
         .unwrap();
     input = input
-        .into_iter()
+        .iter()
         .map(|x| (&x[operation_where..]).to_vec())
         .collect();
     // check if just single worksheet column
