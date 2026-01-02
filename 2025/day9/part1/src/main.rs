@@ -4,13 +4,13 @@ fn main() {
         .map(|x| x.split_once(",").unwrap())
         .map(|x| (x.0.parse::<i64>().unwrap(), x.1.parse::<i64>().unwrap()))
         .collect();
-    let positions = &positions;
-    let ans: i64 = (0..positions.len())
-        .flat_map(|i| {
-            ((i + 1)..positions.len()).map(move |j| {
-                ((positions[i].0 - positions[j].0).abs() + 1)
-                    * ((positions[i].1 - positions[j].1).abs() + 1)
-            })
+    let ans: i64 = positions
+        .iter()
+        .enumerate()
+        .flat_map(|(i, val1)| {
+            positions[i + 1..]
+                .iter()
+                .map(move |val2| ((val1.0 - val2.0).abs() + 1) * ((val1.1 - val2.1).abs() + 1))
         })
         .max()
         .unwrap();
