@@ -37,7 +37,7 @@ fn main() {
     edges.sort_by_key(|&(i, j)| {
         positions[i]
             .iter()
-            .zip(positions[j].clone())
+            .zip(&positions[j])
             .map(|(a, b)| (a - b).pow(2))
             .sum::<i64>()
     });
