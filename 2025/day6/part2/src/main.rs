@@ -1,26 +1,26 @@
 use core::panic;
+use std::cmp;
 
 fn solve(input: &[Vec<char>]) -> i64 {
     // check if just single worksheet column
     if input[input.len() - 1].iter().filter(|&x| *x != ' ').count() == 1 {
         // find the operation
         let op = input[input.len() - 1][0];
-        let (operation, mut ans): (fn(i64, i64) -> i64, i64) = match op {
-            '*' => (|x, y| x * y, 1),
+        let (operation, start): (fn(i64, i64) -> i64, i64) = match op {
+            '*' => (|x, y| x * cmp::max(y, 1), 1),
             '+' => (|x, y| x + y, 0),
             _ => panic!("unknown operation"),
         };
-        for j in 0..input[0].len() {
-            let mut res = (0..input.len() - 1)
-                .filter(|i| input[*i][j] != ' ')
-                .fold(0, |acc, i: usize| {
-                    10 * acc + input[i][j].to_digit(10).unwrap()
-                });
-            if res != 0 {
-                ans = operation(ans, res as i64);
-            }
-        }
-        return ans;
+        return (0..input[0].len()).fold(start, |acc, j| {
+            operation(
+                acc,
+                (0..input.len() - 1)
+                    .filter(|i| input[*i][j] != ' ')
+                    .fold(0, |acc, i: usize| {
+                        10 * acc + input[i][j].to_digit(10).unwrap()
+                    }) as i64,
+            )
+        });
     }
     let ind = input[input.len() - 1]
         .iter()
