@@ -51,8 +51,8 @@ fn main() {
         }
     }
     distances.sort_by(|edge1, edge2| {
-        return distance(positions[edge1.0], positions[edge1.1])
-            .cmp(&distance(positions[edge2.0], positions[edge2.1]));
+        distance(positions[edge1.0], positions[edge1.1])
+            .cmp(&distance(positions[edge2.0], positions[edge2.1]))
     });
     const SIZE: usize = 1000;
     let mut graph = Graph::new(positions.len());
