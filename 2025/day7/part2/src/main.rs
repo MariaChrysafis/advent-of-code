@@ -6,11 +6,10 @@ fn main() {
     let mut beams = HashMap::from([(start, 1)]);
     for row in lines
         .map(|x| x.chars().collect::<Vec<char>>())
-        .collect::<Vec<Vec<char>>>()
     {
         let mut result = HashMap::new();
         for (i, oc) in beams {
-            match row[i as usize] {
+            match row[i] {
                 '^' => vec![i - 1, i + 1],
                 '.' => vec![i],
                 _ => panic!("invalid input"),
