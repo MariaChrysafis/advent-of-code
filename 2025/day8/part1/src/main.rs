@@ -8,8 +8,8 @@ impl Graph {
         }
         vis[node] = true;
         self.adj[node]
-            .clone()
-            .into_iter()
+            .iter()
+            .copied()
             .map(|x| self.dfs(vis, x))
             .sum::<usize>()
             + 1
@@ -20,11 +20,7 @@ impl Graph {
     }
     pub fn components(&mut self) -> Vec<usize> {
         let mut vis = vec![false; self.adj.len()];
-        let mut sizes = Vec::new();
-        for i in 0..self.adj.len() {
-            sizes.push(self.dfs(&mut vis, i));
-        }
-        sizes
+        (0..self.adj.len()).map(|i| self.dfs(&mut vis, i)).collect()
     }
     pub fn new(n: usize) -> Graph {
         Graph {
