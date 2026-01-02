@@ -31,12 +31,8 @@ impl Graph {
         }
     }
 }
-fn distance(pos1: &Vec<i64>, pos2: &Vec<i64>) -> i64 {
-    let mut ans = 0;
-    for i in 0..pos1.len() {
-        ans += (pos1[i] - pos2[i]).pow(2);
-    }
-    ans
+fn distance(pos1: &[i64], pos2: &[i64]) -> i64 {
+    (0..pos1.len()).map(|i| (pos1[i] - pos2[i]).pow(2)).sum()
 }
 fn main() {
     let positions = include_str!("../input/sample.txt")
