@@ -44,17 +44,20 @@ fn main() {
         })
         .map(|x| (x[0], x[1], x[2]))
         .collect::<Vec<(i64, i64, i64)>>();
-    let mut distances: Vec<(i64, (usize, usize))> = vec![];
+    let mut distances: Vec<(usize, usize)> = vec![];
     for i in 0..positions.len() {
         for j in i + 1..positions.len() {
-            distances.push((distance(positions[i], positions[j]), (i, j)));
+            distances.push((i, j));
         }
     }
-    distances.sort();
+    distances.sort_by(|edge1, edge2| {
+        return distance(positions[edge1.0], positions[edge1.1])
+            .cmp(&distance(positions[edge2.0], positions[edge2.1]));
+    });
     const SIZE: usize = 1000;
     let mut graph = Graph::new(positions.len());
     for edge in distances.iter().take(SIZE) {
-        graph.add_edge(edge.1.0, edge.1.1);
+        graph.add_edge(edge.0, edge.1);
     }
     let mut components = graph.components();
     components.sort();
