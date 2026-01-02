@@ -65,11 +65,19 @@ name = "day5-part2"
 version = "0.1.0"
 
 [[package]]
+name = "day6-part1"
+version = "0.1.0"
+
+[[package]]
 name = "day6-part2"
 version = "0.1.0"
 dependencies = [
  "regex",
 ]
+
+[[package]]
+name = "day8-part1"
+version = "0.1.0"
 
 [[package]]
 name = "memchr"
@@ -78,7 +86,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f52b00d39961fc5b2736ea853c9cc86238e165017a493d1d5c8eac6bdc4cc273"
 
 [[package]]
-name = "part1"
+name = "part2"
 version = "0.1.0"
 
 [[package]]

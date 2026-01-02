@@ -4,9 +4,7 @@ fn main() {
     let mut lines = include_str!("../input/input.txt").lines();
     let start = lines.next().unwrap().find('S').unwrap();
     let mut beams = HashMap::from([(start, 1)]);
-    for row in lines
-        .map(|x| x.chars().collect::<Vec<char>>())
-    {
+    for row in lines.map(|x| x.chars().collect::<Vec<char>>()) {
         let mut result = HashMap::new();
         for (i, oc) in beams {
             match row[i] {
