@@ -36,12 +36,9 @@ fn main() {
         .lines()
         .map(|x| x.split(',').map(|x| x.parse::<i64>().unwrap()).collect())
         .collect();
-    let mut edges: Vec<(usize, usize)> = vec![];
-    for i in 0..positions.len() {
-        for j in i + 1..positions.len() {
-            edges.push((i, j));
-        }
-    }
+    let mut edges: Vec<(usize, usize)> = (0..positions.len())
+        .flat_map(|i| (i + 1..positions.len()).map(move |j| (i, j)))
+        .collect();
     edges.sort_by_key(|&(i, j)| distance(&positions[j], &positions[i]));
     const SIZE: usize = 1000;
     let mut graph = Graph::new(positions.len());
