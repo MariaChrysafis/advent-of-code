@@ -55,9 +55,10 @@ fn main() {
     });
     const SIZE: usize = 1000;
     let mut graph = Graph::new(positions.len());
-    for edge in distances.iter().take(SIZE) {
-        graph.add_edge(edge.0, edge.1);
-    }
+    distances
+        .iter()
+        .take(SIZE)
+        .for_each(|edge| graph.add_edge(edge.0, edge.1));
     let mut components = graph.components();
     components.sort();
     components.reverse();
