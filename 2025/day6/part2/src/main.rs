@@ -2,8 +2,12 @@ use core::panic;
 use std::cmp;
 
 fn solve(input: &[Vec<char>]) -> i64 {
+    let index = input[input.len() - 1]
+        .iter()
+        .skip(1)
+        .position(|x| *x != ' ');
     // check if just single worksheet column
-    if input[input.len() - 1].iter().filter(|&x| *x != ' ').count() == 1 {
+    if index == None {
         // find the operation
         let op = input[input.len() - 1][0];
         let (operation, start): (fn(i64, i64) -> i64, i64) = match op {
@@ -22,11 +26,7 @@ fn solve(input: &[Vec<char>]) -> i64 {
             )
         });
     }
-    let ind = input[input.len() - 1]
-        .iter()
-        .skip(1)
-        .position(|x| *x != ' ')
-        .unwrap() + 1;
+    let ind = index.unwrap() + 1;
     let input1: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][..ind].to_vec()).collect();
     let input2: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][ind..].to_vec()).collect();
     return solve(&input1) + solve(&input2);
