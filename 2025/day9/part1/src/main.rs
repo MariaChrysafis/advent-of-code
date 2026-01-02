@@ -7,10 +7,10 @@ fn main() {
     let ans: i64 = positions
         .iter()
         .enumerate()
-        .flat_map(|(i, val1)| {
-            positions[i + 1..]
-                .iter()
-                .map(move |val2| ((val1.0 - val2.0).abs() + 1) * ((val1.1 - val2.1).abs() + 1))
+        .flat_map(|(i, coord1)| {
+            positions[i + 1..].iter().map(move |coord2| {
+                ((coord1.0 - coord2.0).abs() + 1) * ((coord2.1 - coord1.1).abs() + 1)
+            })
         })
         .max()
         .unwrap();
