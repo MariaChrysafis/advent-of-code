@@ -1,15 +1,6 @@
 use core::panic;
 
 fn solve(mut input: Vec<Vec<char>>) -> i64 {
-    // trim all leading spaces
-    let operation_where = (0..input[0].len())
-        .filter(|i| input[input.len() - 1][*i] != ' ')
-        .min()
-        .unwrap();
-    input = input
-        .iter()
-        .map(|x| (&x[operation_where..]).to_vec())
-        .collect();
     // check if just single worksheet column
     if input[input.len() - 1].iter().filter(|&x| *x != ' ').count() == 1 {
         // find the operation
