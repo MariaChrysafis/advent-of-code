@@ -1,4 +1,4 @@
-use std::collections;
+use std::collections::{self, HashSet};
 fn main() {
     let mut input = include_str!("../input/input.txt")
         .split("\n")
@@ -13,9 +13,9 @@ fn main() {
     ]);
     let mut ans = 0;
     for row in input {
-        let mut new_beams: Vec<i32> = beams
+        let new_beams: HashSet<i32> = beams
             .iter()
-            .map(|j| {
+            .flat_map(|j| {
                 if row[*j as usize] != '^' {
                     return vec![*j];
                 } else {
@@ -23,11 +23,7 @@ fn main() {
                     return vec![j - 1, j + 1];
                 }
             })
-            .collect::<Vec<Vec<i32>>>()
-            .concat()
-            .iter()
-            .filter(|&x| *x >= 0 && *x < row.len() as i32)
-            .copied()
+            .filter(|&x| x >= 0 && x < row.len() as i32)
             .collect();
         beams = new_beams.into_iter().collect();
     }
