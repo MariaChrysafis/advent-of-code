@@ -2,15 +2,15 @@ struct Graph {
     adj: Vec<Vec<usize>>,
 }
 impl Graph {
-    fn dfs(&mut self, vis: &mut Vec<usize>, node: usize, cntr: usize) -> usize {
-        if vis[node] != 0 {
+    fn dfs(&self, vis: &mut Vec<bool>, node: usize) -> usize {
+        if vis[node] {
             return 0;
         }
-        vis[node] = cntr;
+        vis[node] = true;
         self.adj[node]
             .clone()
             .iter()
-            .map(|&x| self.dfs(vis, x, cntr))
+            .map(|&x| self.dfs(vis, x))
             .sum::<usize>()
             + 1
     }
@@ -19,10 +19,10 @@ impl Graph {
         self.adj[v].push(u);
     }
     pub fn components(&mut self) -> Vec<usize> {
-        let mut vis = vec![0; self.adj.len()];
+        let mut vis = vec![false; self.adj.len()];
         let mut sizes = Vec::new();
         for i in 0..self.adj.len() {
-            sizes.push(self.dfs(&mut vis, i, i + 1));
+            sizes.push(self.dfs(&mut vis, i));
         }
         sizes
     }
