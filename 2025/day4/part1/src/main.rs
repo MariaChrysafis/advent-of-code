@@ -5,7 +5,7 @@ fn main() {
         .flat_map(|(i, str)| {
             str.chars()
                 .enumerate()
-                .filter(|(j, val)| *val == '@')
+                .filter(|(_, val)| *val == '@')
                 .map(move |x| (i, x.0))
         })
         .collect::<Vec<(usize, usize)>>();

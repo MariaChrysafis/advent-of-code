@@ -10,13 +10,13 @@ fn main() {
         .split("\n")
         .map(|x| {
             let (l, r) = x.split_once("-").unwrap();
-            return (l.parse::<i64>().unwrap(), r.parse::<i64>().unwrap());
+            (l.parse::<i64>().unwrap(), r.parse::<i64>().unwrap())
         })
         .collect();
     let ans = numbers
         .iter()
         .filter(|&x| {
-            return intervals.iter().any(|(l, r)| l <= x && x <= r);
+            intervals.iter().any(|(l, r)| l <= x && x <= r)
         })
         .count();
     println!("{ans}");

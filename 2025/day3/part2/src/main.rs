@@ -11,7 +11,7 @@ fn max_joltage(str: &str, batteries: usize) -> i64 {
             );
         }
     }
-    return dp[str.len()][batteries];
+    dp[str.len()][batteries]
 }
 
 fn main() {

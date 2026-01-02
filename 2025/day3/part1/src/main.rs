@@ -10,7 +10,7 @@ fn max_joltage(str: &str) -> u32 {
             }
         }
     }
-    return mx;
+    mx
 }
 
 fn main() {

@@ -1,7 +1,7 @@
 fn is_valid(i: i64) -> bool {
     let str = i.to_string();
     let len = str.len();
-    return str[..len / 2] != str[len / 2..];
+    str[..len / 2] != str[len / 2..]
 }
 
 fn main() {

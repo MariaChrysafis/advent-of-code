@@ -7,7 +7,7 @@ fn solve(input: &[Vec<char>]) -> i64 {
         .skip(1)
         .position(|x| *x != ' ');
     // check if just single worksheet column
-    if index == None {
+    if index.is_none() {
         // find the operation
         let op = input[input.len() - 1][0];
         let (operation, start): (fn(i64, i64) -> i64, i64) = match op {
@@ -32,7 +32,7 @@ fn solve(input: &[Vec<char>]) -> i64 {
         .map(|vec| vec.split_at(ind))
         .map(|(l, r)| (l.to_vec(), r.to_vec()))
         .unzip();
-    return solve(&input1) + solve(&input2);
+    solve(&input1) + solve(&input2)
 }
 fn main() {
     let input: Vec<Vec<char>> = include_str!("../input/input.txt")

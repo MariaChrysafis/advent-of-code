@@ -9,14 +9,14 @@ fn num_removable_rolls(mut roll_indices: Vec<(usize, usize)>) -> i32 {
                     (x1 as i32 - x2 as i32).abs() <= 1 && (y1 as i32 - y2 as i32).abs() <= 1
                 })
                 .count();
-            return num_roll_neighbors <= 4;
+            num_roll_neighbors <= 4
         })
         .collect();
-    if to_remove.len() == 0 {
+    if to_remove.is_empty() {
         return 0;
     }
-    roll_indices.retain(|x| !to_remove.contains(&x));
-    return num_removable_rolls(roll_indices) + to_remove.len() as i32;
+    roll_indices.retain(|x| !to_remove.contains(x));
+    num_removable_rolls(roll_indices) + to_remove.len() as i32
 }
 fn main() {
     let roll_indices = include_str!("../input/input.txt")
