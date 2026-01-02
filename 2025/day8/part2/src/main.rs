@@ -30,9 +30,6 @@ impl Graph {
         }
     }
 }
-fn distance(pos1: &[i64], pos2: &[i64]) -> i64 {
-    pos1.iter().zip(pos2).map(|(a, b)| (a - b).pow(2)).sum()
-}
 fn main() {
     let positions: Vec<Vec<i64>> = include_str!("../input/input.txt")
         .lines()
@@ -41,7 +38,13 @@ fn main() {
     let mut edges: Vec<(usize, usize)> = (0..positions.len())
         .flat_map(|i| (i + 1..positions.len()).map(move |j| (i, j)))
         .collect();
-    edges.sort_by_key(|(i, j)| distance(&positions[*i], &positions[*j]));
+    edges.sort_by_key(|&(i, j)| {
+        positions[i]
+            .iter()
+            .zip(positions[j].clone())
+            .map(|(a, b)| (a - b).pow(2))
+            .sum::<i64>()
+    });
     let mut graph = Graph::new(positions.len());
     for (i, j) in edges {
         graph.join(i, j);
