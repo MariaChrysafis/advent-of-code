@@ -1,4 +1,3 @@
-use std::mem::swap;
 struct Graph {
     parent: Vec<usize>,
     sz: Vec<usize>,
@@ -16,9 +15,6 @@ impl Graph {
         v = self.find_head(v);
         if u == v {
             return;
-        }
-        if self.sz[u] > self.sz[v] {
-            swap(&mut u, &mut v);
         }
         self.parent[u] = v;
         self.sz[v] += self.sz[u];
