@@ -1,6 +1,6 @@
 use core::panic;
 
-fn solve(input: Vec<Vec<char>>) -> i64 {
+fn solve(input: &[Vec<char>]) -> i64 {
     // check if just single worksheet column
     if input[input.len() - 1].iter().filter(|&x| *x != ' ').count() == 1 {
         // find the operation
@@ -31,13 +31,13 @@ fn solve(input: Vec<Vec<char>>) -> i64 {
         .map(|x| x.0).collect::<Vec<usize>>()[1];
     let input1: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][..ind].to_vec()).collect();
     let input2: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][ind..].to_vec()).collect();
-    return solve(input1) + solve(input2);
+    return solve(&input1) + solve(&input2);
 }
 fn main() {
     let input: Vec<Vec<char>> = include_str!("../input/input.txt")
         .split("\n")
         .map(|x| x.chars().collect())
         .collect();
-    let ans = solve(input);
+    let ans = solve(&input);
     println!("{ans}");
 }
