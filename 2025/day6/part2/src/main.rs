@@ -11,13 +11,11 @@ fn solve(input: &[Vec<char>]) -> i64 {
             _ => panic!("unknown operation"),
         };
         for j in 0..input[0].len() {
-            let mut res = 0;
-            for i in 0..input.len() - 1 {
-                if input[i][j] == ' ' {
-                    continue;
-                }
-                res = 10 * res + input[i][j].to_digit(10).unwrap();
-            }
+            let mut res = (0..input.len() - 1)
+                .filter(|i| input[*i][j] != ' ')
+                .fold(0, |acc, i: usize| {
+                    10 * acc + input[i][j].to_digit(10).unwrap()
+                });
             if res != 0 {
                 ans = operation(ans, res as i64);
             }
@@ -28,7 +26,8 @@ fn solve(input: &[Vec<char>]) -> i64 {
         .iter()
         .enumerate()
         .filter(|&(_, c)| *c != ' ')
-        .map(|x| x.0).collect::<Vec<usize>>()[1];
+        .map(|x| x.0)
+        .collect::<Vec<usize>>()[1];
     let input1: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][..ind].to_vec()).collect();
     let input2: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][ind..].to_vec()).collect();
     return solve(&input1) + solve(&input2);
