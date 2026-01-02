@@ -1,19 +1,13 @@
 use core::panic;
 use std::collections::HashMap;
 fn main() {
-    let mut input = include_str!("../input/input.txt")
-        .lines()
-        .map(|x| x.chars().collect::<Vec<char>>());
-    let mut beams: HashMap<i32, i64> = HashMap::from([(
-        input
-            .next()
-            .unwrap()
-            .iter()
-            .position(|x| *x == 'S')
-            .unwrap() as i32,
-        1,
-    )]);
-    for row in input {
+    let mut lines = include_str!("../input/input.txt").lines();
+    let start = lines.next().unwrap().find('S').unwrap();
+    let mut beams = HashMap::from([(start, 1)]);
+    for row in lines
+        .map(|x| x.chars().collect::<Vec<char>>())
+        .collect::<Vec<Vec<char>>>()
+    {
         let mut result = HashMap::new();
         for (i, oc) in beams {
             match row[i as usize] {
@@ -24,7 +18,7 @@ fn main() {
             .iter()
             .for_each(|&ind| *result.entry(ind).or_insert(0) += oc);
         }
-        result.retain(|&i, _| (0..row.len() as i32).contains(&i));
+        result.retain(|&i, _| (0..row.len()).contains(&i));
         beams = result;
     }
     let ans: i64 = beams.values().sum();
