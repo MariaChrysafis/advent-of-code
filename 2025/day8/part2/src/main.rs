@@ -41,12 +41,13 @@ fn main() {
             .sum::<i64>()
     });
     let mut graph = Graph::new(positions.len());
-    for (i, j) in edges {
-        graph.join(i, j);
-        if graph.sz[graph.find_head(i)] == positions.len() {
-            let ans = positions[i][0] * positions[j][0];
-            print!("{ans}");
-            return;
-        }
-    }
+    let ans = edges
+        .into_iter()
+        .find_map(|(i, j)| {
+            graph.join(i, j);
+            (graph.sz[graph.find_head(i)] == positions.len())
+                .then(|| positions[i][0] * positions[j][0])
+        })
+        .unwrap();
+    println!("{ans}");
 }
