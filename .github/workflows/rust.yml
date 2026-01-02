@@ -19,6 +19,9 @@ jobs:
     - name: Check formatting
       run: cargo fmt --check
       working-directory: 2025
+    - name: Clippy
+      run: cargo clippy -- -D warnings
+      working-directory: 2025
     - name: Build
       run: cargo build --verbose
       working-directory: 2025
