@@ -20,12 +20,12 @@ fn main() {
                 '^' => vec![i - 1, i + 1],
                 '.' => vec![i],
                 _ => panic!("invalid input"),
-            }.iter().for_each(|&ind| *result.entry(ind).or_insert(0) += oc);
+            }
+            .iter()
+            .for_each(|&ind| *result.entry(ind).or_insert(0) += oc);
         }
-        beams = result
-            .into_iter()
-            .filter(|&(res, _)| res >= 0 && res < row.len() as i32)
-            .collect();
+        result.retain(|&i, _| (0..row.len() as i32).contains(&i));
+        beams = result;
     }
     let ans: i64 = beams.values().sum();
     println!("{ans}")
