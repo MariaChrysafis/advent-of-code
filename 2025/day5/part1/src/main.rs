@@ -15,9 +15,7 @@ fn main() {
         .collect();
     let ans = numbers
         .iter()
-        .filter(|&x| {
-            intervals.iter().any(|(l, r)| l <= x && x <= r)
-        })
+        .filter(|&x| intervals.iter().any(|(l, r)| l <= x && x <= r))
         .count();
     println!("{ans}");
 }
