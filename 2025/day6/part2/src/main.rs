@@ -27,8 +27,13 @@ fn solve(input: &[Vec<char>]) -> i64 {
         });
     }
     let ind = index.unwrap() + 1;
-    let input1: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][..ind].to_vec()).collect();
-    let input2: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][ind..].to_vec()).collect();
+    let (input1, input2): (Vec<Vec<char>>, Vec<Vec<char>>) = input
+        .iter()
+        .map(|vec| {
+            let (l, r) = vec.split_at(ind);
+            return (l.to_vec(), r.to_vec());
+        })
+        .unzip();
     return solve(&input1) + solve(&input2);
 }
 fn main() {
