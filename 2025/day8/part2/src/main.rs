@@ -13,11 +13,10 @@ impl Graph {
     pub fn join(&mut self, mut u: usize, mut v: usize) {
         u = self.find_head(u);
         v = self.find_head(v);
-        if u == v {
-            return;
+        if u != v {
+            self.parent[u] = v;
+            self.sz[v] += self.sz[u];
         }
-        self.parent[u] = v;
-        self.sz[v] += self.sz[u];
     }
     pub fn new(n: usize) -> Graph {
         Graph {
