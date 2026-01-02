@@ -24,10 +24,9 @@ fn solve(input: &[Vec<char>]) -> i64 {
     }
     let ind = input[input.len() - 1]
         .iter()
-        .enumerate()
-        .filter(|&(_, c)| *c != ' ')
-        .map(|x| x.0)
-        .collect::<Vec<usize>>()[1];
+        .skip(1)
+        .position(|x| *x != ' ')
+        .unwrap() + 1;
     let input1: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][..ind].to_vec()).collect();
     let input2: Vec<Vec<char>> = (0..input.len()).map(|i| input[i][ind..].to_vec()).collect();
     return solve(&input1) + solve(&input2);
