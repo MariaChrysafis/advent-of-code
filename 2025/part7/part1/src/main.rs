@@ -1,15 +1,16 @@
+use std::collections;
 fn main() {
     let mut input = include_str!("../input/input.txt")
         .split("\n")
         .map(|x| x.chars().collect::<Vec<char>>());
-    let mut beams: Vec<i32> = vec![
+    let mut beams: collections::HashSet<i32> = collections::HashSet::from([
         input
             .next()
             .unwrap()
             .iter()
             .position(|x| *x == 'S')
             .unwrap() as i32,
-    ];
+    ]);
     let mut ans = 0;
     for row in input {
         let mut new_beams: Vec<i32> = beams
@@ -28,8 +29,7 @@ fn main() {
             .filter(|&x| *x >= 0 && *x < row.len() as i32)
             .copied()
             .collect();
-        new_beams.dedup();
-        beams = new_beams;
+        beams = new_beams.into_iter().collect();
     }
     // let ans = beams.len();
     println!("{ans}")
