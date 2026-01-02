@@ -27,6 +27,5 @@ fn main() {
             .collect();
         beams = new_beams.into_iter().collect();
     }
-    // let ans = beams.len();
     println!("{ans}")
 }
