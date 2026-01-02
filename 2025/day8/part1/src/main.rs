@@ -49,10 +49,7 @@ fn main() {
             distances.push((i, j));
         }
     }
-    distances.sort_by(|edge1, edge2| {
-        distance(&positions[edge1.0], &positions[edge1.1])
-            .cmp(&distance(&positions[edge2.0], &positions[edge2.1]))
-    });
+    distances.sort_by_key(|&(i, j)| distance(&positions[j], &positions[i]));
     const SIZE: usize = 1000;
     let mut graph = Graph::new(positions.len());
     distances
