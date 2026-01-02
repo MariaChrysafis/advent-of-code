@@ -28,7 +28,6 @@ fn main() {
             .filter(|&x| *x >= 0 && *x < row.len() as i32)
             .copied()
             .collect();
-        new_beams.sort_unstable();
         new_beams.dedup();
         beams = new_beams;
     }
