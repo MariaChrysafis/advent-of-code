@@ -1,9 +1,9 @@
-use std::collections::{self, HashSet};
+use std::collections::HashSet;
 fn main() {
     let mut input = include_str!("../input/input.txt")
-        .split("\n")
+        .lines()
         .map(|x| x.chars().collect::<Vec<char>>());
-    let mut beams: collections::HashSet<i32> = collections::HashSet::from([
+    let mut beams: HashSet<i32> = HashSet::from([
         input
             .next()
             .unwrap()
@@ -17,10 +17,10 @@ fn main() {
             .iter()
             .flat_map(|j| {
                 if row[*j as usize] != '^' {
-                    return vec![*j];
+                    vec![*j]
                 } else {
                     ans += 1;
-                    return vec![j - 1, j + 1];
+                    vec![j - 1, j + 1]
                 }
             })
             .filter(|&x| x >= 0 && x < row.len() as i32)
