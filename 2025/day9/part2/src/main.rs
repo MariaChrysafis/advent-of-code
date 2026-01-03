@@ -30,7 +30,7 @@ fn valid_pairs(input: Vec<Point>) -> Vec<(Point, Point)> {
         .collect();
     for line in lines {
         for i in cmp::min(line.0.x, line.1.x)..=cmp::max(line.0.x, line.1.x) {
-            for j in cmp::min(line.0.y, line.1.y)..=cmp::max(line.1.y, line.1.y) {
+            for j in cmp::min(line.0.y, line.1.y)..=cmp::max(line.0.y, line.1.y) {
                 is_inside[i as usize][j as usize] = true;
             }
         }
