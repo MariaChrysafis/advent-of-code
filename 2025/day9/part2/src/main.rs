@@ -11,7 +11,7 @@ fn valid_pairs(input: Vec<Point>) -> Vec<(Point, Point)> {
         .collect();
     let mut is_inside = vec![vec![false; sz]; sz];
     for (i, row) in is_inside.iter_mut().enumerate().take(sz) {
-        for (j, interior) in row.iter_mut().enumerate().take(sz){
+        for (j, interior) in row.iter_mut().enumerate().take(sz) {
             let mut cntr = 0;
             for line in lines.iter() {
                 if line.0.x == line.1.x
