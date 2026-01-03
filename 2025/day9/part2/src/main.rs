@@ -62,12 +62,7 @@ fn main() {
     positions.dedup();
     let compressed_points: Vec<Point> = points
         .iter()
-        .map(|point| {
-            [
-                positions.iter().position(|&val| val == point[0]).unwrap() as i64,
-                positions.iter().position(|&val| val == point[1]).unwrap() as i64,
-            ]
-        })
+        .map(|point| point.map(|c| positions.iter().position(|&val| val == c).unwrap() as i64))
         .collect();
     let ans = valid_pairs(&compressed_points)
         .iter()
