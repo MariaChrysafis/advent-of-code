@@ -53,7 +53,6 @@ fn main() {
         .map(|x| x.split_once(",").unwrap())
         .map(|x| [x.0.parse::<i64>().unwrap(), x.1.parse::<i64>().unwrap()])
         .collect();
-    // coordinate compression (map a large coordinate to a smaller one)
     let mut positions: Vec<i64> = points
         .iter()
         .flat_map(|point| vec![point[0], point[1]])
