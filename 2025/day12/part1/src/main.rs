@@ -117,6 +117,12 @@ fn dfs(
         .flatten()
         .filter(|&x| *x == Cell::Unknown)
         .count() as i32;
+    // grid._print();
+    println!("need_to_fill: {}", need_to_fill);
+    println!("can_fill: {}", can_fill);
+    if need_to_fill.abs_diff(can_fill) > 100 {
+        return true;
+    }
     if need_to_fill > can_fill {
         return false;
     }
@@ -166,7 +172,7 @@ fn solve(shapes: &Vec<Vec<Shape>>, dimensions: (usize, usize), cnts: Vec<i32>) -
     )
 }
 fn main() {
-    let points: Vec<&str> = include_str!("../input/sample.txt").split("\n\n").collect();
+    let points: Vec<&str> = include_str!("../input/input.txt").split("\n\n").collect();
     let trees: Vec<Vec<Shape>> = points[..points.len() - 1]
         .to_vec()
         .iter()
@@ -202,15 +208,12 @@ fn main() {
             )
         })
         .collect();
-
+    let mut sum = 0;
     for region in regions {
         let ans = solve(&trees, region.0, region.1);
-        // for arr in trees {
-        //     for shape in arr {
-        //         shape.print();
-        //     }
-        // }
         println!("{}", ans);
+        sum += ans as i32;
         // return;
     }
+    println!("Sum: {}", sum);
 }
