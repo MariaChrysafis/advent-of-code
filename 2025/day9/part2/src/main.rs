@@ -4,7 +4,7 @@ struct Point {
     x: i64,
     y: i64,
 }
-fn valid_pairs(input: Vec<Point>) -> Vec<(Point, Point)> {
+fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
     let sz: usize = input.iter().map(|p| cmp::max(p.x, p.y) + 1).max().unwrap() as usize;
     let lines: Vec<(Point, Point)> = (0..input.len())
         .map(|i| (input[i], (input[(i + 1) % input.len()])))
@@ -36,9 +36,9 @@ fn valid_pairs(input: Vec<Point>) -> Vec<(Point, Point)> {
         }
     }
     let mut ans = vec![];
-    for &point1 in &input {
+    for &point1 in input {
         assert!(is_inside[point1.x as usize][point1.y as usize]);
-        for &point2 in &input {
+        for &point2 in input {
             let mut fine = true;
             for i in cmp::min(point1.x, point2.x)..=cmp::max(point1.x, point2.x) {
                 for j in cmp::min(point1.y, point2.y)..=cmp::max(point1.y, point2.y) {
@@ -74,15 +74,14 @@ fn main() {
         .collect();
     positions.sort();
     positions.dedup();
-    let result = valid_pairs(
-        points
-            .iter()
-            .map(|point| Point {
-                x: positions.iter().position(|&val| val == point.x).unwrap() as i64 * 2,
-                y: positions.iter().position(|&val| val == point.y).unwrap() as i64 * 2,
-            })
-            .collect(),
-    );
+    let compressed_points: Vec<Point> = points
+        .iter()
+        .map(|point| Point {
+            x: positions.iter().position(|&val| val == point.x).unwrap() as i64 * 2,
+            y: positions.iter().position(|&val| val == point.y).unwrap() as i64 * 2,
+        })
+        .collect();
+    let result = valid_pairs(&compressed_points);
     let mut ans = 0;
     for (point1, point2) in result {
         let dx = positions[(point1.x as usize) / 2].abs_diff(positions[(point2.x as usize) / 2]);
