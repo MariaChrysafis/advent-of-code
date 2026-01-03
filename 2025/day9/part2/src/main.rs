@@ -1,10 +1,7 @@
-#[derive(PartialEq, Clone, Copy)]
-struct Point {
-    x: i64,
-    y: i64,
-}
+type Point = [i64; 2];
+
 fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
-    let sz: usize = input.iter().map(|p| p.x.max(p.y) + 1).max().unwrap() as usize;
+    let sz: usize = input.iter().map(|p| p[0].max(p[1]) + 1).max().unwrap() as usize;
     let lines: Vec<(Point, Point)> = (0..input.len())
         .map(|i| (input[i], input[(i + 1) % input.len()]))
         .collect();
@@ -15,10 +12,10 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
                     lines
                         .iter()
                         .filter(|line| {
-                            line.0.x == line.1.x
-                                && i < line.0.x as usize
-                                && j > line.0.y.min(line.1.y) as usize
-                                && j <= line.0.y.max(line.1.y) as usize
+                            line.0[0] == line.1[0]
+                                && i < line.0[0] as usize
+                                && j > line.0[1].min(line.1[1]) as usize
+                                && j <= line.0[1].max(line.1[1]) as usize
                         })
                         .count()
                         % 2
@@ -28,8 +25,8 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
         })
         .collect();
     for line in lines {
-        for i in line.0.x.min(line.1.x)..=line.0.x.max(line.1.x) {
-            is_inside[i as usize][line.1.y as usize] = true;
+        for i in line.0[0].min(line.1[0])..=line.0[0].max(line.1[0]) {
+            is_inside[i as usize][line.1[1] as usize] = true;
         }
     }
     input
@@ -39,9 +36,10 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
                 .iter()
                 .map(move |&point2| (point1, point2))
                 .filter(|&(point1, point2)| {
-                    (point1.x.min(point2.x)..=point1.x.max(point2.x))
+                    (point1[0].min(point2[0])..=point1[0].max(point2[0]))
                         .flat_map(|i| {
-                            (point1.y.min(point2.y)..=point1.y.max(point2.y)).map(move |j| (i, j))
+                            (point1[1].min(point2[1])..=point1[1].max(point2[1]))
+                                .map(move |j| (i, j))
                         })
                         .all(|(i, j)| is_inside[i as usize][j as usize])
                 })
@@ -53,28 +51,29 @@ fn main() {
     let points: Vec<Point> = include_str!("../input/input.txt")
         .lines()
         .map(|x| x.split_once(",").unwrap())
-        .map(|x| (x.0.parse::<i64>().unwrap(), x.1.parse::<i64>().unwrap()))
-        .map(|(x, y)| Point { x, y })
+        .map(|x| [x.0.parse::<i64>().unwrap(), x.1.parse::<i64>().unwrap()])
         .collect();
     // coordinate compression (map a large coordinate to a smaller one)
     let mut positions: Vec<i64> = points
         .iter()
-        .flat_map(|point| vec![point.x, point.y])
+        .flat_map(|point| vec![point[0], point[1]])
         .collect();
     positions.sort();
     positions.dedup();
     let compressed_points: Vec<Point> = points
         .iter()
-        .map(|point| Point {
-            x: positions.iter().position(|&val| val == point.x).unwrap() as i64,
-            y: positions.iter().position(|&val| val == point.y).unwrap() as i64,
+        .map(|point| {
+            [
+                positions.iter().position(|&val| val == point[0]).unwrap() as i64,
+                positions.iter().position(|&val| val == point[1]).unwrap() as i64,
+            ]
         })
         .collect();
     let ans = valid_pairs(&compressed_points)
         .iter()
         .map(|(point1, point2)| {
-            let dx = positions[point1.x as usize].abs_diff(positions[point2.x as usize]);
-            let dy = positions[point1.y as usize].abs_diff(positions[point2.y as usize]);
+            let dx = positions[point1[0] as usize].abs_diff(positions[point2[0] as usize]);
+            let dy = positions[point1[1] as usize].abs_diff(positions[point2[1] as usize]);
             (dx + 1) * (dy + 1)
         })
         .max()
