@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt};
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 struct Shape {
     coordinates: Vec<(usize, usize)>,
     sz: usize,
@@ -38,7 +38,10 @@ fn get_all_shapes(shape: Shape) -> Vec<Shape> {
         ans.push(s.clone());
         ans.push(s.flip());
     }
-    ans
+    ans.into_iter()
+        .collect::<std::collections::HashSet<_>>()
+        .into_iter()
+        .collect()
 }
 #[derive(PartialEq, Eq, Clone, Copy, Hash)]
 enum Cell {
