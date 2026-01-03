@@ -33,20 +33,21 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
             is_inside[i as usize][line.1.y as usize] = true;
         }
     }
-    let mut ans = vec![];
-    for &point1 in input {
-        for &point2 in input {
-            let all_inside = (point1.x.min(point2.x)..=point1.x.max(point2.x))
-                .flat_map(|i| {
-                    (point1.y.min(point2.y)..=point1.y.max(point2.y)).map(move |j| (i, j))
+    input
+        .iter()
+        .flat_map(|&point1| {
+            input
+                .iter()
+                .map(move |&point2| (point1, point2))
+                .filter(|&(point1, point2)| {
+                    (point1.x.min(point2.x)..=point1.x.max(point2.x))
+                        .flat_map(|i| {
+                            (point1.y.min(point2.y)..=point1.y.max(point2.y)).map(move |j| (i, j))
+                        })
+                        .all(|(i, j)| is_inside[i as usize][j as usize])
                 })
-                .all(|(i, j)| is_inside[i as usize][j as usize]);
-            if all_inside {
-                ans.push((point1, point2));
-            }
-        }
-    }
-    ans
+        })
+        .collect()
 }
 fn main() {
     // tests();
