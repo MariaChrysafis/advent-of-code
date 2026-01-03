@@ -9,21 +9,25 @@ fn valid_pairs(input: Vec<Point>) -> Vec<(Point, Point)> {
     let lines: Vec<(Point, Point)> = (0..input.len())
         .map(|i| (input[i], (input[(i + 1) % input.len()])))
         .collect();
-    let mut is_inside = vec![vec![false; sz]; sz];
-    for (i, row) in is_inside.iter_mut().enumerate().take(sz) {
-        for (j, interior) in row.iter_mut().enumerate().take(sz) {
-            let cntr = lines
-                .iter()
-                .filter(|line| {
-                    line.0.x == line.1.x
-                        && i < line.0.x as usize
-                        && j > cmp::min(line.0.y, line.1.y) as usize
-                        && j <= cmp::max(line.0.y, line.1.y) as usize
+    let mut is_inside: Vec<Vec<bool>> = (0..sz)
+        .map(|i| {
+            (0..sz)
+                .map(|j| {
+                    lines
+                        .iter()
+                        .filter(|line| {
+                            line.0.x == line.1.x
+                                && i < line.0.x as usize
+                                && j > cmp::min(line.0.y, line.1.y) as usize
+                                && j <= cmp::max(line.0.y, line.1.y) as usize
+                        })
+                        .count()
+                        % 2
+                        == 1
                 })
-                .count();
-            *interior = cntr % 2 == 1;
-        }
-    }
+                .collect::<Vec<bool>>()
+        })
+        .collect();
     for line in lines {
         for i in cmp::min(line.0.x, line.1.x)..=cmp::max(line.0.x, line.1.x) {
             for j in cmp::min(line.0.y, line.1.y)..=cmp::max(line.1.y, line.1.y) {
