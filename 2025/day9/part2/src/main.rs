@@ -21,7 +21,7 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
                         % 2
                         == 1
                 })
-                .collect::<Vec<bool>>()
+                .collect()
         })
         .collect();
     for line in lines {
