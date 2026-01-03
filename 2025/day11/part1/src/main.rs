@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 fn dfs(x: &str, adj: &HashMap<&str, Vec<&str>>, cnt: &mut HashMap<String, i32>) {
     *cnt.entry(x.to_string()).or_insert(0) += 1;
-    for node in adj.get(x).unwrap_or(&vec![]) {
-        dfs(node, adj, cnt);
-    }
+    adj.get(x)
+        .unwrap_or(&vec![])
+        .iter()
+        .for_each(|node| dfs(node, adj, cnt))
 }
 
 fn main() {
