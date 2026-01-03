@@ -71,12 +71,16 @@ fn main() {
             y: positions.iter().position(|&val| val == point.y).unwrap() as i64 * 2,
         })
         .collect();
-    let result = valid_pairs(&compressed_points);
-    let mut ans = 0;
-    for (point1, point2) in result {
-        let dx = positions[(point1.x as usize) / 2].abs_diff(positions[(point2.x as usize) / 2]);
-        let dy = positions[(point1.y as usize) / 2].abs_diff(positions[(point2.y as usize) / 2]);
-        ans = cmp::max(ans, (dx + 1) * (dy + 1));
-    }
+    let ans = valid_pairs(&compressed_points)
+        .iter()
+        .map(|(point1, point2)| {
+            let dx =
+                positions[(point1.x as usize) / 2].abs_diff(positions[(point2.x as usize) / 2]);
+            let dy =
+                positions[(point1.y as usize) / 2].abs_diff(positions[(point2.y as usize) / 2]);
+            (dx + 1) * (dy + 1)
+        })
+        .max()
+        .unwrap();
     println!("{}", ans);
 }
