@@ -47,24 +47,22 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
         .collect()
 }
 fn main() {
-    // tests();
     let points: Vec<Point> = include_str!("../input/input.txt")
         .lines()
-        .map(|x| x.split_once(",").unwrap())
-        .map(|x| [x.0.parse::<i64>().unwrap(), x.1.parse::<i64>().unwrap()])
+        .map(|x| {
+            let (a, b) = x.split_once(",").unwrap();
+            [a.parse().unwrap(), b.parse().unwrap()]
+        })
         .collect();
-    let mut positions: Vec<i64> = points
-        .iter()
-        .flat_map(|point| vec![point[0], point[1]])
-        .collect();
+    let mut positions: Vec<i64> = points.iter().flat_map(|point| *point).collect();
     positions.sort();
     positions.dedup();
     let compressed_points: Vec<Point> = points
         .iter()
-        .map(|point| point.map(|c| positions.iter().position(|&val| val == c).unwrap() as i64))
+        .map(|point| point.map(|c| positions.binary_search(&c).unwrap() as i64))
         .collect();
     let ans = valid_pairs(&compressed_points)
-        .iter()
+        .into_iter()
         .map(|(p1, p2)| {
             (0..2)
                 .map(|i| positions[p1[i] as usize].abs_diff(positions[p2[i] as usize]) + 1)
