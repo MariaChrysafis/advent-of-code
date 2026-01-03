@@ -7,7 +7,7 @@ struct Point {
 fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
     let sz: usize = input.iter().map(|p| cmp::max(p.x, p.y) + 1).max().unwrap() as usize;
     let lines: Vec<(Point, Point)> = (0..input.len())
-        .map(|i| (input[i], (input[(i + 1) % input.len()])))
+        .map(|i| (input[i], input[(i + 1) % input.len()]))
         .collect();
     let mut is_inside: Vec<Vec<bool>> = (0..sz)
         .map(|i| {
@@ -30,9 +30,7 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
         .collect();
     for line in lines {
         for i in cmp::min(line.0.x, line.1.x)..=cmp::max(line.0.x, line.1.x) {
-            for j in cmp::min(line.0.y, line.1.y)..=cmp::max(line.0.y, line.1.y) {
-                is_inside[i as usize][j as usize] = true;
-            }
+            is_inside[i as usize][line.1.y as usize] = true;
         }
     }
     let mut ans = vec![];
@@ -54,7 +52,6 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
             if fine {
                 ans.push((point1, point2));
             }
-            // does this make a square??
         }
     }
     ans
