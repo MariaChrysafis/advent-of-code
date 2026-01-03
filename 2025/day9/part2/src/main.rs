@@ -1,11 +1,10 @@
-use std::cmp;
 #[derive(PartialEq, Clone, Copy)]
 struct Point {
     x: i64,
     y: i64,
 }
 fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
-    let sz: usize = input.iter().map(|p| cmp::max(p.x, p.y) + 1).max().unwrap() as usize;
+    let sz: usize = input.iter().map(|p| p.x.max(p.y) + 1).max().unwrap() as usize;
     let lines: Vec<(Point, Point)> = (0..input.len())
         .map(|i| (input[i], input[(i + 1) % input.len()]))
         .collect();
@@ -18,8 +17,8 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
                         .filter(|line| {
                             line.0.x == line.1.x
                                 && i < line.0.x as usize
-                                && j > cmp::min(line.0.y, line.1.y) as usize
-                                && j <= cmp::max(line.0.y, line.1.y) as usize
+                                && j > line.0.y.min(line.1.y) as usize
+                                && j <= line.0.y.max(line.1.y) as usize
                         })
                         .count()
                         % 2
@@ -29,7 +28,7 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
         })
         .collect();
     for line in lines {
-        for i in cmp::min(line.0.x, line.1.x)..=cmp::max(line.0.x, line.1.x) {
+        for i in line.0.x.min(line.1.x)..=line.0.x.max(line.1.x) {
             is_inside[i as usize][line.1.y as usize] = true;
         }
     }
