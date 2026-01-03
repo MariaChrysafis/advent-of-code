@@ -66,10 +66,10 @@ fn main() {
         .collect();
     let ans = valid_pairs(&compressed_points)
         .iter()
-        .map(|(point1, point2)| {
-            let dx = positions[point1[0] as usize].abs_diff(positions[point2[0] as usize]);
-            let dy = positions[point1[1] as usize].abs_diff(positions[point2[1] as usize]);
-            (dx + 1) * (dy + 1)
+        .map(|(p1, p2)| {
+            (0..2)
+                .map(|i| positions[p1[i] as usize].abs_diff(positions[p2[i] as usize]) + 1)
+                .product::<u64>()
         })
         .max()
         .unwrap();
