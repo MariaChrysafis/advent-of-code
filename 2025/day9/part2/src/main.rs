@@ -37,19 +37,11 @@ fn valid_pairs(input: &[Point]) -> Vec<(Point, Point)> {
     for &point1 in input {
         assert!(is_inside[point1.x as usize][point1.y as usize]);
         for &point2 in input {
-            let mut fine = true;
-            for i in cmp::min(point1.x, point2.x)..=cmp::max(point1.x, point2.x) {
-                for j in cmp::min(point1.y, point2.y)..=cmp::max(point1.y, point2.y) {
-                    if !is_inside[i as usize][j as usize] {
-                        fine = false;
-                        break;
-                    }
-                }
-                if !fine {
-                    break;
-                }
-            }
-            if fine {
+            let fine = (cmp::min(point1.x, point2.x)..=cmp::max(point1.x, point2.x)).any(|i| {
+                (cmp::min(point1.y, point2.y)..=cmp::max(point1.y, point2.y))
+                    .any(|j| !is_inside[i as usize][j as usize])
+            });
+            if !fine {
                 ans.push((point1, point2));
             }
         }
