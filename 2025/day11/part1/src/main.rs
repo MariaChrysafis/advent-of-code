@@ -1,17 +1,13 @@
 use std::collections::HashMap;
-fn dfs(x: &str, adj: &Vec<(&str, Vec<&str>)>, cnt: &mut HashMap<String, i32>) {
+fn dfs(x: &str, adj: &HashMap<&str, Vec<&str>>, cnt: &mut HashMap<String, i32>) {
     *cnt.entry(x.to_string()).or_insert(0) += 1;
-    for (node, neighbors) in adj {
-        if *node == x {
-            for neighbor in neighbors {
-                dfs(neighbor, adj, cnt);
-            }
-        }
+    for node in adj.get(x).unwrap_or(&vec![]) {
+        dfs(node, adj, cnt);
     }
 }
 
 fn main() {
-    let adj: Vec<(&str, Vec<&str>)> = include_str!("../input/input.txt")
+    let adj: HashMap<&str, Vec<&str>> = include_str!("../input/input.txt")
         .lines()
         .map(|str| {
             let (node, neighbors) = str.split_once(':').unwrap();
