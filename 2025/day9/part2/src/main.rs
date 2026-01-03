@@ -1,7 +1,7 @@
-type Point = [i64; 2];
+type Point = [usize; 2];
 
 fn max_valid_area(input: &[Point], positions: &[i64]) -> u64 {
-    let sz: usize = input.iter().map(|p| p[0].max(p[1]) + 1).max().unwrap() as usize;
+    let sz = input.iter().map(|p| p[0].max(p[1]) + 1).max().unwrap();
     let lines: Vec<(Point, Point)> = (0..input.len())
         .map(|i| (input[i], input[(i + 1) % input.len()]))
         .collect();
@@ -13,9 +13,9 @@ fn max_valid_area(input: &[Point], positions: &[i64]) -> u64 {
                         .iter()
                         .filter(|line| {
                             line.0[0] == line.1[0]
-                                && i < line.0[0] as usize
-                                && j > line.0[1].min(line.1[1]) as usize
-                                && j <= line.0[1].max(line.1[1]) as usize
+                                && i < line.0[0]
+                                && j > line.0[1].min(line.1[1])
+                                && j <= line.0[1].max(line.1[1])
                         })
                         .count()
                         % 2
@@ -25,18 +25,18 @@ fn max_valid_area(input: &[Point], positions: &[i64]) -> u64 {
         })
         .collect();
     for line in lines {
-        for i in line.0[0].min(line.1[0])..=line.0[0].max(line.1[0]) {
-            is_inside[i as usize][line.1[1] as usize] = true;
+        for row in &mut is_inside[line.0[0].min(line.1[0])..=line.0[0].max(line.1[0])] {
+            row[line.1[1]] = true;
         }
     }
     let is_valid = |p1: Point, p2: Point| {
         (p1[0].min(p2[0])..=p1[0].max(p2[0]))
             .flat_map(|i| (p1[1].min(p2[1])..=p1[1].max(p2[1])).map(move |j| (i, j)))
-            .all(|(i, j)| is_inside[i as usize][j as usize])
+            .all(|(i, j)| is_inside[i][j])
     };
     let area = |p1: Point, p2: Point| {
         (0..2)
-            .map(|i| positions[p1[i] as usize].abs_diff(positions[p2[i] as usize]) + 1)
+            .map(|i| positions[p1[i]].abs_diff(positions[p2[i]]) + 1)
             .product()
     };
     input
@@ -48,19 +48,19 @@ fn max_valid_area(input: &[Point], positions: &[i64]) -> u64 {
         .unwrap()
 }
 fn main() {
-    let points: Vec<Point> = include_str!("../input/input.txt")
+    let points: Vec<[i64; 2]> = include_str!("../input/input.txt")
         .lines()
         .map(|x| {
             let (a, b) = x.split_once(",").unwrap();
             [a.parse().unwrap(), b.parse().unwrap()]
         })
         .collect();
-    let mut positions: Vec<i64> = points.iter().flat_map(|point| *point).collect();
+    let mut positions: Vec<i64> = points.iter().flatten().copied().collect();
     positions.sort();
     positions.dedup();
     let compressed_points: Vec<Point> = points
         .iter()
-        .map(|point| point.map(|c| positions.binary_search(&c).unwrap() as i64))
+        .map(|point| point.map(|c| positions.binary_search(&c).unwrap()))
         .collect();
     println!("{}", max_valid_area(&compressed_points, &positions));
 }
