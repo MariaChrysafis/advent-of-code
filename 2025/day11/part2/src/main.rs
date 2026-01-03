@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 type Node = (String, [bool; 2]);
 struct Graph {
-    adj: HashMap<Node, Vec<Node>>,
+    adj: HashMap<String, Vec<String>>,
 }
 impl Graph {
     pub fn dfs(&self, node: &Node, dp: &mut HashMap<Node, i64>) -> i64 {
@@ -10,10 +10,16 @@ impl Graph {
         }
         let result: i64 = self
             .adj
-            .get(node)
+            .get(&node.0)
             .map_or(&vec![], |v| v)
             .iter()
-            .map(|next| self.dfs(next, dp))
+            .map(|n| {
+                let next = (
+                    n.clone(),
+                    [node.1[0] || n == "dac", node.1[1] || n == "fft"],
+                );
+                self.dfs(&next, dp)
+            })
             .sum();
         dp.insert(node.clone(), result);
         result
@@ -33,18 +39,7 @@ fn main() {
             )
         })
         .collect();
-    let mut adjn: HashMap<Node, Vec<Node>> = HashMap::new();
-    for (node, neighbors) in adj {
-        for flags in [[true, false], [true, true], [false, true], [false, false]] {
-            for n in &neighbors {
-                adjn.entry((node.clone(), flags)).or_default().push((
-                    n.to_string(),
-                    [flags[0] || n == "dac", flags[1] || n == "fft"],
-                ));
-            }
-        }
-    }
-    let graph = Graph { adj: adjn };
+    let graph = Graph { adj };
     let start = &("svr".to_string(), [false, false]);
     let end = &("out".to_string(), [true, true]);
     println!(
