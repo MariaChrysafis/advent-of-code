@@ -67,17 +67,15 @@ fn main() {
     let compressed_points: Vec<Point> = points
         .iter()
         .map(|point| Point {
-            x: positions.iter().position(|&val| val == point.x).unwrap() as i64 * 2,
-            y: positions.iter().position(|&val| val == point.y).unwrap() as i64 * 2,
+            x: positions.iter().position(|&val| val == point.x).unwrap() as i64,
+            y: positions.iter().position(|&val| val == point.y).unwrap() as i64,
         })
         .collect();
     let ans = valid_pairs(&compressed_points)
         .iter()
         .map(|(point1, point2)| {
-            let dx =
-                positions[(point1.x as usize) / 2].abs_diff(positions[(point2.x as usize) / 2]);
-            let dy =
-                positions[(point1.y as usize) / 2].abs_diff(positions[(point2.y as usize) / 2]);
+            let dx = positions[point1.x as usize].abs_diff(positions[point2.x as usize]);
+            let dy = positions[point1.y as usize].abs_diff(positions[point2.y as usize]);
             (dx + 1) * (dy + 1)
         })
         .max()
