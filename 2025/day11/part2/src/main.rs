@@ -16,7 +16,7 @@ fn dfs(adj: &HashMap<String, Vec<String>>, node: &Node, dp: &mut HashMap<Node, i
                 adj,
                 &(
                     n.clone(),
-                    [node.1[0] || n == TARGETS[0], node.1[1] || n == TARGETS[1]],
+                    std::array::from_fn(|i: usize| node.1[i] || n == TARGETS[i]),
                 ),
                 dp,
             )
