@@ -4,19 +4,16 @@ struct Graph {
     adj: HashMap<Node, Vec<Node>>,
 }
 impl Graph {
-    pub fn dfs(&self, node: &Node, end: &Node, dp: &mut HashMap<Node, i64>) -> i64 {
+    pub fn dfs(&self, node: &Node, dp: &mut HashMap<Node, i64>) -> i64 {
         if dp.contains_key(node) {
             return *dp.get(node).unwrap();
-        }
-        if node == end {
-            return 1;
         }
         let result: i64 = self
             .adj
             .get(node)
             .map_or(&vec![], |v| v)
             .iter()
-            .map(|next| self.dfs(next, end, dp))
+            .map(|next| self.dfs(next, dp))
             .sum();
         dp.insert(node.clone(), result);
         result
@@ -50,6 +47,8 @@ fn main() {
     let graph = Graph { adj: adjn };
     let start = &("svr".to_string(), [false, false]);
     let end = &("out".to_string(), [true, true]);
-    let mut dp: HashMap<Node, i64> = HashMap::new();
-    println!("{}", graph.dfs(start, end, &mut dp))
+    println!(
+        "{}",
+        graph.dfs(start, &mut HashMap::from([(end.clone(), 1i64)]))
+    )
 }
