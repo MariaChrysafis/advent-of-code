@@ -12,16 +12,15 @@ fn valid_pairs(input: Vec<Point>) -> Vec<(Point, Point)> {
     let mut is_inside = vec![vec![false; sz]; sz];
     for (i, row) in is_inside.iter_mut().enumerate().take(sz) {
         for (j, interior) in row.iter_mut().enumerate().take(sz) {
-            let mut cntr = 0;
-            for line in lines.iter() {
-                if line.0.x == line.1.x
-                    && i < line.0.x as usize
-                    && j > cmp::min(line.0.y, line.1.y) as usize
-                    && j <= cmp::max(line.0.y, line.1.y) as usize
-                {
-                    cntr += 1;
-                }
-            }
+            let cntr = lines
+                .iter()
+                .filter(|line| {
+                    line.0.x == line.1.x
+                        && i < line.0.x as usize
+                        && j > cmp::min(line.0.y, line.1.y) as usize
+                        && j <= cmp::max(line.0.y, line.1.y) as usize
+                })
+                .count();
             *interior = cntr % 2 == 1;
         }
     }
