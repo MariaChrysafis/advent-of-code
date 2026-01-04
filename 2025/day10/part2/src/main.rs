@@ -22,12 +22,8 @@ fn main() {
                 .map(|i| i.parse::<usize>().unwrap())
                 .collect();
             let mut vars = good_lp::variables!();
-            for _ in positions.clone() {
-                vars.add(good_lp::variable().min(0).integer());
-            }
-            let variables: Vec<Variable> = vars
-                .iter_variables_with_def()
-                .map(|(variable, _)| variable)
+            let variables: Vec<Variable> = (0..positions.len())
+                .map(|_| vars.add(good_lp::variable().min(0).integer()))
                 .collect();
             let mut problem = vars
                 .clone()
