@@ -1,0 +1,1 @@
+/Users/mariachrysafis/Documents/advent-of-code/2023/target/debug/part1: /Users/mariachrysafis/Documents/advent-of-code/2023/day25/part1/input/input.txt /Users/mariachrysafis/Documents/advent-of-code/2023/day25/part1/src/main.rs
