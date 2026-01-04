@@ -1,0 +1,8 @@
+[package]
+name = "part2"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+good_lp = { version = "1.14.2", default-features = false, features = ["minilp"] }
+reduced_row_echelon_form_jeck = "0.1.0"
