@@ -33,7 +33,7 @@ fn main() {
                 .clone()
                 .minimise(variables.iter().sum::<Expression>())
                 .using(default_solver);
-            for (ind, _) in end.iter().enumerate() {
+            (0..end.len()).for_each(|ind| {
                 problem.add_constraint(
                     variables
                         .iter()
@@ -42,7 +42,7 @@ fn main() {
                         .sum::<Expression>()
                         .eq(end[ind] as i32),
                 );
-            }
+            });
             let solution = problem.solve().unwrap();
             vars.iter_variables_with_def()
                 .map(|(var, _)| solution.value(var).round() as i32)
