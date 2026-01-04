@@ -49,5 +49,5 @@ fn main() {
                 .sum::<i32>()
         })
         .sum();
-    println!("{}", ans);
+    println!("{ans}");
 }
