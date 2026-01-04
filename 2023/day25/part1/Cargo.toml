@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 petgraph = "0.8.3"
+rustworkx-core = "0.17.1"
