@@ -6,12 +6,10 @@ fn main() {
         .split("\n")
         .flat_map(|str| {
             let (node, neighbors) = str.split_once(":").unwrap();
-            let mut arr = vec![];
-            for x in neighbors.split_whitespace() {
-                arr.push((node, x));
-                //println!("{x} {node}");
-            }
-            arr
+            neighbors
+                .split_whitespace()
+                .map(|x| (node, x))
+                .collect::<Vec<(&str, &str)>>()
         })
         .collect();
     let nodes: HashSet<&str> = edges
