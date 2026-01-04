@@ -1,1 +1,0 @@
-impl std::iter::Iterator<Item = <&petgraph::graphmap::GraphMap<&str, (), petgraph::Undirected> as petgraph::visit::IntoEdgeReferences>::EdgeRef>
