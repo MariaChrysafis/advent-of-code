@@ -5,4 +5,5 @@ edition = "2024"
 
 [dependencies]
 geo = "0.28"
+itertools = "0.12"
 nalgebra = "0.34.1"
