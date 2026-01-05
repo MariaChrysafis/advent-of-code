@@ -2,9 +2,8 @@ use z3::ast::{Ast, Int};
 use z3::{Config, Context, Solver};
 
 const DIMENSIONS: usize = 3;
-type Ray = [[i64; DIMENSIONS]; 2];
 fn main() {
-    let input: Vec<Ray> = include_str!("../input/input.txt")
+    let input = include_str!("../input/input.txt")
         .split("\n")
         .map(|str| {
             let (position, direction) = str.split_once("@").unwrap();
@@ -17,8 +16,7 @@ fn main() {
             };
             [parse(position), parse(direction)]
         })
-        .take(3)
-        .collect();
+        .take(3);
 
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
@@ -28,7 +26,7 @@ fn main() {
             .map(|i| Int::fresh_const(&ctx, &format!("{j}{i}")))
             .collect()
     });
-    for (i, ray) in input.iter().enumerate() {
+    for (i, ray) in input.enumerate() {
         let var = Int::fresh_const(&ctx, &format!("a{}", i));
         solver.assert(&var.gt(&Int::from_u64(&ctx, 0))); // t >= 0
         for k in 0..DIMENSIONS {
