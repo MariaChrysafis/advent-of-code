@@ -1,5 +1,5 @@
 use geo::line_intersection::{LineIntersection, line_intersection};
-use geo::{Coord, Line};
+use geo::{Coord, Intersects, Line, Rect};
 
 fn main() {
     // parse the input
@@ -23,23 +23,16 @@ fn main() {
         .collect();
     const MIN: f64 = 200000000000000.0;
     const MAX: f64 = 400000000000000.0;
+    let bounds = Rect::new(Coord { x: MIN, y: MIN }, Coord { x: MAX, y: MAX });
     let mut count = 0;
     for (i, segment1) in input.iter().enumerate() {
         for segment2 in input[i + 1..].iter() {
             let in_bounds = match line_intersection(*segment1, *segment2) {
                 Some(LineIntersection::SinglePoint { intersection, .. }) => {
-                    intersection.x >= MIN
-                        && intersection.x <= MAX
-                        && intersection.y >= MIN
-                        && intersection.y <= MAX
+                    bounds.intersects(&intersection)
                 }
                 Some(LineIntersection::Collinear { intersection }) => {
-                    // intersection is the overlapping Line segment
-                    let x_min = intersection.start.x.min(intersection.end.x);
-                    let x_max = intersection.start.x.max(intersection.end.x);
-                    let y_min = intersection.start.y.min(intersection.end.y);
-                    let y_max = intersection.start.y.max(intersection.end.y);
-                    x_max >= MIN && x_min <= MAX && y_max >= MIN && y_min <= MAX
+                    bounds.intersects(&intersection)
                 }
                 None => false,
             };
