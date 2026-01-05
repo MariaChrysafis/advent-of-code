@@ -31,11 +31,11 @@ fn main() {
             )
         })
         .unzip();
-    for i in 0..input.len() {
+    for (i, ray) in input.iter().enumerate() {
         let var = Int::fresh_const(&ctx, &format!("a{}", i));
         solver.assert(&var.gt(&Int::from_u64(&ctx, 0))); // t >= 0
         for k in 0..DIMENSIONS {
-            let left = &var * input[i][1][k] + input[i][0][k];
+            let left = &var * ray[1][k] + ray[0][k];
             let right = &var * &direction_variables[k] + &point_variables[k];
             solver.assert(&left._eq(&right));
         }
@@ -45,7 +45,7 @@ fn main() {
             let model = solver.get_model().unwrap();
             let ans: i64 = point_variables
                 .iter()
-                .map(|v| model.eval(v, true).unwrap().as_i64().unwrap())
+                .map(|pv| model.eval(pv, true).unwrap().as_i64().unwrap())
                 .sum();
             println!("ans: {}", ans);
         }
