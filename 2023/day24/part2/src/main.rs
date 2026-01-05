@@ -23,26 +23,23 @@ fn main() {
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
     let solver = Solver::new(&ctx);
-    let (point_variables, direction_variables): (Vec<_>, Vec<_>) = (0..DIMENSIONS)
-        .map(|i| {
-            (
-                Int::fresh_const(&ctx, &format!("p{i}")),
-                Int::fresh_const(&ctx, &format!("d{i}")),
-            )
-        })
-        .unzip();
+    let variables: [Vec<Int>; 2] = std::array::from_fn(|j| {
+        (0..DIMENSIONS)
+            .map(|i| Int::fresh_const(&ctx, &format!("{j}{i}")))
+            .collect()
+    });
     for (i, ray) in input.iter().enumerate() {
         let var = Int::fresh_const(&ctx, &format!("a{}", i));
         solver.assert(&var.gt(&Int::from_u64(&ctx, 0))); // t >= 0
         for k in 0..DIMENSIONS {
             let left = &var * ray[1][k] + ray[0][k];
-            let right = &var * &direction_variables[k] + &point_variables[k];
+            let right = &var * &variables[1][k] + &variables[0][k];
             solver.assert(&left._eq(&right));
         }
     }
     solver.check();
     let model = solver.get_model().unwrap();
-    let ans: i64 = point_variables
+    let ans: i64 = variables[0]
         .iter()
         .map(|pv| model.eval(pv, true).unwrap().as_i64().unwrap())
         .sum();
