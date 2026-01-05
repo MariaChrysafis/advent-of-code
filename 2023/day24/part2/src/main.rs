@@ -43,14 +43,10 @@ fn main() {
     match solver.check() {
         SatResult::Sat => {
             let model = solver.get_model().unwrap();
-            let mut ans: i64 = 0;
-            for i in 0..DIMENSIONS {
-                ans += model
-                    .eval(&point_variables[i], true)
-                    .unwrap()
-                    .as_i64()
-                    .unwrap();
-            }
+            let ans: i64 = point_variables
+                .iter()
+                .map(|v| model.eval(v, true).unwrap().as_i64().unwrap())
+                .sum();
             println!("ans: {}", ans);
         }
         SatResult::Unknown => {
