@@ -1,0 +1,70 @@
+use std::fmt::format;
+
+use z3::ast::{Ast, Int};
+use z3::{Config, Context, SatResult, Solver};
+
+const DIMENSIONS: usize = 3;
+const DIM_NAMES: [&str; DIMENSIONS] = ["x", "y", "z"];
+const INDICES: [&str; 3] = ["0", "1", "2"];
+type Point = [i64; DIMENSIONS];
+type Direction = [i64; DIMENSIONS];
+
+struct Ray {
+    start: Point,
+    direction: Direction,
+}
+fn main() {
+    let input: Vec<Ray> = include_str!("../input/input.txt")
+        .split("\n")
+        .map(|str| {
+            let (position, direction) = str.split_once("@").unwrap();
+            let parse = |s: &str| -> [i64; 3] {
+                let res: Vec<i64> = s
+                    .split(",")
+                    .map(|x| x.trim().parse::<i64>().unwrap())
+                    .collect();
+                [res[0], res[1], res[2]]
+            };
+            Ray {
+                start: parse(position),
+                direction: parse(direction),
+            }
+        })
+        .collect();
+
+    let mut cfg = Config::new();
+    let ctx = Context::new(&cfg);
+    let solver = Solver::new(&ctx);
+    let mut point_variables = vec![];
+    let mut direction_variables = vec![];
+    for i in 0..DIMENSIONS {
+        point_variables.push(Int::fresh_const(&ctx, &format!("p{}", i)));
+        direction_variables.push(Int::fresh_const(&ctx, &format!("d{}", i)));
+    }
+    let mut variables1 = vec![];
+    let mut variables2 = vec![];
+    let mut intersection_point_variables = vec![];
+    for i in 0..input.len() {
+        variables1.push(Int::fresh_const(&ctx, &format!("a{}", i)));
+        variables2.push(Int::fresh_const(&ctx, &format!("b{}", i)));
+        for k in 0..DIMENSIONS {
+            intersection_point_variables.push(Int::fresh_const(&ctx, &format!("a {} {}", i, k)));
+        }
+
+        solver.assert(&variables1[i].gt(&Int::from_u64(&ctx, 0))); // t >= 0
+        for k in 0..DIMENSIONS {
+            let left = &variables1[k] * input[i].direction[k] + input[i].start[k];
+            let right = &variables2[k] * point_variables[k] + direction_variables[k];
+            //let right = &intersection_point_variables[k];
+            solver.assert(&left._eq(&right));
+        }
+    }
+    match solver.check() {
+        SatResult::Sat => {
+            let model = solver.get_model().unwrap();
+        }
+        SatResult::Unsat => {
+            println!("No solution found");
+        }
+    }
+}

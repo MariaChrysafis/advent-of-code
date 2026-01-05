@@ -1,0 +1,5 @@
+[env]
+BINDGEN_EXTRA_CLANG_ARGS = "-I/opt/homebrew/opt/z3/include"
+LIBRARY_PATH = "/opt/homebrew/opt/z3/lib"
+DYLD_LIBRARY_PATH = "/opt/homebrew/opt/z3/lib"
+
