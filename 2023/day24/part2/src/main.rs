@@ -1,5 +1,5 @@
 use z3::ast::{Ast, Int};
-use z3::{Config, Context, SatResult, Solver};
+use z3::{Config, Context, Solver};
 
 const DIMENSIONS: usize = 3;
 type Ray = [[i64; DIMENSIONS]; 2];
@@ -40,20 +40,11 @@ fn main() {
             solver.assert(&left._eq(&right));
         }
     }
-    match solver.check() {
-        SatResult::Sat => {
-            let model = solver.get_model().unwrap();
-            let ans: i64 = point_variables
-                .iter()
-                .map(|pv| model.eval(pv, true).unwrap().as_i64().unwrap())
-                .sum();
-            println!("ans: {}", ans);
-        }
-        SatResult::Unknown => {
-            println!("unknown")
-        }
-        SatResult::Unsat => {
-            println!("No solution found");
-        }
-    }
+    solver.check();
+    let model = solver.get_model().unwrap();
+    let ans: i64 = point_variables
+        .iter()
+        .map(|pv| model.eval(pv, true).unwrap().as_i64().unwrap())
+        .sum();
+    println!("ans: {}", ans);
 }
