@@ -20,18 +20,19 @@ fn main() {
                     y: pos_parts[1] + dir_parts[1] * INFINITY,
                 },
             }
-        })
-        .collect::<Vec<_>>();
+        });
     const MIN: f64 = 200000000000000.0;
     const MAX: f64 = 400000000000000.0;
     let bounds = Rect::new(Coord { x: MIN, y: MIN }, Coord { x: MAX, y: MAX });
     let count = input
-        .iter()
         .combinations(2)
-        .filter(|pair| match line_intersection(*pair[0], *pair[1]) {
-            Some(LineIntersection::SinglePoint { intersection, .. }) => bounds.intersects(&intersection),
-            Some(LineIntersection::Collinear { intersection }) => bounds.intersects(&intersection),
-            None => false,
+        .filter(|pair| {
+            let [line1, line2] = pair.as_slice() else { panic!() };
+            match line_intersection(*line1, *line2) {
+                Some(LineIntersection::SinglePoint { intersection, .. }) => bounds.intersects(&intersection),
+                Some(LineIntersection::Collinear { intersection }) => bounds.intersects(&intersection),
+                None => false,
+            }
         })
         .count();
     println!("{}", count);
