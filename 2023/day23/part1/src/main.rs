@@ -58,17 +58,17 @@ impl Grid {
         }
     }
 }
-fn dfs(grid: &Grid, coord: Point, past_points: &Vec<Point>) -> i32 {
+fn dfs(grid: &Grid, coord: Point, past_points: Vec<Point>) -> i32 {
     if grid.get(coord) == Some('#') || grid.get(coord) == None {
         return 0;
     }
     grid.neighbors(coord)
         .iter()
         .filter(|point| !past_points.contains(point))
-        .map(|neighbor| {
+        .map(|&neighbor| {
             let mut new_past_points = past_points.clone();
-            new_past_points.push(*neighbor);
-            dfs(grid, *neighbor, &new_past_points)
+            new_past_points.push(neighbor);
+            dfs(grid, neighbor, new_past_points)
         })
         .max()
         .unwrap_or_default()
@@ -83,7 +83,7 @@ fn main() {
     let ans = grid
         .all_points()
         .iter()
-        .map(|&point| dfs(&grid, point, &vec![point]))
+        .map(|&point| dfs(&grid, point, vec![point]))
         .max()
         .unwrap()
         - 1;
