@@ -15,10 +15,10 @@ impl Grid {
         {
             return None;
         }
-        return Some(self.grid[point.x as usize][point.y as usize]);
+        Some(self.grid[point.x as usize][point.y as usize])
     }
     fn all_points(&self) -> Vec<Point> {
-        return (0..self.grid.len())
+        (0..self.grid.len())
             .flat_map(|x| {
                 (0..self.grid[0].len())
                     .map(|y| Point {
@@ -27,7 +27,7 @@ impl Grid {
                     })
                     .collect::<Vec<Point>>()
             })
-            .collect();
+            .collect()
     }
     fn neighbors(&self, point: Point) -> Vec<Point> {
         match self.get(point).unwrap() {
@@ -59,7 +59,7 @@ impl Grid {
     }
 }
 fn dfs(grid: &Grid, coord: Point, past_points: Vec<Point>) -> i32 {
-    if grid.get(coord) == Some('#') || grid.get(coord) == None {
+    if grid.get(coord) == Some('#') || grid.get(coord).is_none() {
         return 0;
     }
     grid.neighbors(coord)
@@ -77,7 +77,7 @@ fn dfs(grid: &Grid, coord: Point, past_points: Vec<Point>) -> i32 {
 fn main() {
     let g: Vec<Vec<char>> = include_str!("../input/sample.txt")
         .split("\n")
-        .map(|x| x.chars().into_iter().collect())
+        .map(|x| x.chars().collect())
         .collect::<Vec<Vec<char>>>();
     let grid = Grid { grid: g };
     let ans = grid
