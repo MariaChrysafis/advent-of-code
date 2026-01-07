@@ -62,17 +62,17 @@ fn dfs(grid: &Grid, coord: Point, past_points: &Vec<Point>) -> i32 {
     if grid.get(coord) == Some('#') || grid.get(coord) == None {
         return 0;
     }
-    let mut ans = 0;
-    for neighbor in grid
-        .neighbors(coord)
+    grid.neighbors(coord)
         .iter()
         .filter(|point| !past_points.contains(point))
-    {
-        let mut new_past_points = past_points.clone();
-        new_past_points.push(*neighbor);
-        ans = ans.max(dfs(grid, *neighbor, &new_past_points));
-    }
-    return ans + 1;
+        .map(|neighbor| {
+            let mut new_past_points = past_points.clone();
+            new_past_points.push(*neighbor);
+            dfs(grid, *neighbor, &new_past_points)
+        })
+        .max()
+        .unwrap_or_default()
+        + 1
 }
 fn main() {
     let g: Vec<Vec<char>> = include_str!("../input/sample.txt")
