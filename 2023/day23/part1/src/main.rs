@@ -17,17 +17,11 @@ impl Grid {
         }
         Some(self.grid[point.x as usize][point.y as usize])
     }
-    fn all_points(&self) -> Vec<Point> {
-        (0..self.grid.len())
-            .flat_map(|x| {
-                (0..self.grid[0].len())
-                    .map(|y| Point {
-                        x: x as i32,
-                        y: y as i32,
-                    })
-                    .collect::<Vec<Point>>()
-            })
-            .collect()
+    fn start(&self) -> Point {
+        Point {
+            x: 0,
+            y: self.grid[0].iter().position(|c| *c == '.').unwrap() as i32,
+        }
     }
     fn neighbors(&self, point: Point) -> Vec<Point> {
         let deltas: &[[i32; 2]] = match self.get(point).unwrap() {
@@ -65,17 +59,11 @@ fn dfs(grid: &Grid, coord: Point, past_points: Vec<Point>) -> i32 {
         + 1
 }
 fn main() {
-    let g: Vec<Vec<char>> = include_str!("../input/sample.txt")
+    let g: Vec<Vec<char>> = include_str!("../input/input.txt")
         .split("\n")
         .map(|x| x.chars().collect())
         .collect::<Vec<Vec<char>>>();
     let grid = Grid { grid: g };
-    let ans = grid
-        .all_points()
-        .iter()
-        .map(|&point| dfs(&grid, point, vec![point]))
-        .max()
-        .unwrap()
-        - 1;
+    let ans = dfs(&grid, grid.start(), vec![grid.start()]) - 1;
     println!("{ans}");
 }
