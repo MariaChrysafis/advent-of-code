@@ -31,31 +31,20 @@ impl Grid {
     }
     fn neighbors(&self, point: Point) -> Vec<Point> {
         match self.get(point).unwrap() {
-            '>' => vec![Point {
-                x: point.x,
-                y: point.y + 1,
-            }],
-            '<' => vec![Point {
-                x: point.x,
-                y: point.y - 1,
-            }],
-            'v' => vec![Point {
-                x: point.x + 1,
-                y: point.y,
-            }],
-            '^' => vec![Point {
-                x: point.x - 1,
-                y: point.y,
-            }],
-            '.' => [[-1, 0], [1, 0], [0, 1], [0, -1]]
-                .map(|delta| Point {
-                    x: point.x + delta[0],
-                    y: point.y + delta[1],
-                })
-                .into_iter()
-                .collect(),
+            '>' => vec![[0, 1]],
+            '<' => vec![[0, -1]],
+            'v' => vec![[1, 0]],
+            '^' => vec![[1, -1]],
+            '.' => vec![[0, 1], [0, -1], [1, 0], [-1, 0]],
             _ => panic!(),
         }
+        .iter()
+        .map(|delta| Point {
+            x: point.x + delta[0],
+            y: point.y + delta[1],
+        })
+        .into_iter()
+        .collect()
     }
 }
 fn dfs(grid: &Grid, coord: Point, past_points: Vec<Point>) -> i32 {
