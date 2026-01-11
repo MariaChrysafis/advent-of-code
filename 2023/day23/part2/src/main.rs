@@ -6,15 +6,14 @@ struct Point {
     x: usize,
 }
 
+#[derive(Default)]
 struct Graph {
     adj: HashMap<Point, Vec<(Point, usize)>>,
 }
 
 impl Graph {
-    fn from(grid: &[Vec<char>]) -> Self {
-        let mut graph = Self {
-            adj: HashMap::new(),
-        };
+    fn new(grid: &[Vec<char>]) -> Self {
+        let mut graph = Self::default();
         const DIRS: [(i32, i32); 2] = [(-1, 0), (0, 1)];
         for (x, row) in grid.iter().enumerate() {
             for (y, &c) in row.iter().enumerate() {
@@ -97,7 +96,7 @@ fn main() {
         y: find_open(&grid[grid.len() - 2]),
     };
 
-    let mut graph = Graph::from(&grid);
+    let mut graph = Graph::new(&grid);
     graph.compress();
 
     let mut vis = HashSet::from([start]);
