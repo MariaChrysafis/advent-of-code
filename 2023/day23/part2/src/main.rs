@@ -15,21 +15,16 @@ impl Graph {
         let mut graph = Self {
             adj: HashMap::new(),
         };
-        const DIRS: [(i32, i32); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
+        const DIRS: [(i32, i32); 2] = [(-1, 0), (0, 1)];
         for (x, row) in grid.iter().enumerate() {
             for (y, &c) in row.iter().enumerate() {
                 if c == '#' {
                     continue;
                 }
-                for (dx, dy) in DIRS {
-                    let (nx, ny) = ((x as i32 + dx) as usize, (y as i32 + dy) as usize);
-                    if grid[nx][ny] != '#' {
-                        let (p1, p2) = (Point { x, y }, Point { x: nx, y: ny });
-                        if p1 < p2 {
-                            graph.add_edge(p1, p2, 1);
-                        }
-                    }
-                }
+                DIRS.iter()
+                    .map(|&(dx, dy)| ((x as i32 + dx) as usize, (y as i32 + dy) as usize))
+                    .filter(|&(nx, ny)| grid[nx][ny] != '#')
+                    .for_each(|(nx, ny)| graph.add_edge(Point { x, y }, Point { x: nx, y: ny }, 1));
             }
         }
         graph
@@ -67,18 +62,19 @@ impl Graph {
         if node == end {
             return Some(0);
         }
-        let mut ans: Option<usize> = None;
-        for (neighbor, weight) in &self.adj[node] {
-            if vis.contains(neighbor) {
-                continue;
-            }
-            vis.insert(*neighbor);
-            if let Some(sub) = self.dfs(neighbor, end, vis) {
-                ans = Some(ans.unwrap_or(0).max(weight + sub));
-            }
-            vis.remove(neighbor);
-        }
-        ans
+        let neighbors: Vec<_> = self.adj[node]
+            .iter()
+            .filter(|(n, _)| !vis.contains(n))
+            .collect();
+        neighbors
+            .iter()
+            .filter_map(|&&(n, w)| {
+                vis.insert(n);
+                let result = self.dfs(&n, end, vis).map(|d| d + w);
+                vis.remove(&n);
+                result
+            })
+            .max()
     }
 }
 
