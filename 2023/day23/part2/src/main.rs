@@ -60,7 +60,7 @@ impl Graph {
         ans
     }
     fn degree(&self, point: &Point) -> usize {
-        self.adj.get(&point).map(|v| v.len()).unwrap_or(0)
+        self.adj.get(point).map(|v| v.len()).unwrap_or(0)
     }
     fn modify_edge(&mut self, point1: &Point, point2: &Point, weight: usize, to_add: bool) {
         for point in [point1, point2] {
