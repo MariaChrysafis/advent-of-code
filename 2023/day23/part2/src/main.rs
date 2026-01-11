@@ -1,84 +1,144 @@
-use std::cmp;
+use std::{collections::HashMap, hash::Hash};
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 struct Point {
-    y: i32,
-    x: i32,
+    y: usize,
+    x: usize,
 }
-struct State {
-    grid: Vec<Vec<char>>,
-    coord: Point,
-    has_visited: Vec<Vec<bool>>,
+
+struct Graph {
+    adj: HashMap<Point, Vec<(Point, usize)>>,
+    deg: HashMap<usize, Vec<Point>>, // maps degrees to list of nodes with that degree
 }
-impl State {
-    fn from(grid: Vec<Vec<char>>) -> State {
-        let coord = Point {
-            x: 0,
-            y: grid[0].iter().position(|&c| c != '#').unwrap() as i32,
-        };
-        let mut has_visited = vec![vec![false; grid.len()]; grid[0].len()];
-        has_visited[coord.x as usize][coord.y as usize] = true;
-        State {
-            grid: grid.clone(),
-            coord,
-            has_visited,
+
+trait HashMapVecExt<T, U> {
+    fn remove_from_vec(&mut self, key: T, val: U);
+    fn add_to_vec(&mut self, key: T, val: U);
+}
+
+impl<T, U> HashMapVecExt<T, U> for HashMap<T, Vec<U>>
+where
+    T: std::hash::Hash + Eq,
+    U: PartialEq + Copy,
+{
+    fn remove_from_vec(&mut self, key: T, val: U) {
+        if let Some(vec) = self.get_mut(&key) {
+            vec.retain(|&x| x != val);
         }
     }
-    fn has_visited(&self, point: &Point) -> bool {
-        self.has_visited[point.x as usize][point.y as usize]
-    }
-    fn get(&self, point: &Point) -> Option<char> {
-        if point.x <= 0
-            || point.y < 0
-            || point.x >= self.grid.len() as i32
-            || point.y >= self.grid[0].len() as i32
-        {
-            return None;
-        }
-        Some(self.grid[point.x as usize][point.y as usize])
-    }
-    fn neighbors(&self, point: &Point) -> Vec<Point> {
-        [[-1, 0], [1, 0], [0, -1], [0, 1]]
-            .iter()
-            .map(|[dx, dy]| Point {
-                x: point.x + dx,
-                y: point.y + dy,
-            })
-            .filter(|point| self.get(point).is_some_and(|x| x != '#') && !self.has_visited(point))
-            .collect()
+
+    fn add_to_vec(&mut self, key: T, val: U) {
+        self.entry(key).or_default().push(val);
     }
 }
 
-//longest distance till we reach the bottom
-fn dfs(state: &mut State) -> i32 {
-    assert!(state.has_visited[state.coord.x as usize][state.coord.y as usize]);
-    let mut d = 1;
-    while state.neighbors(&state.coord).len() == 1 {
-        let next_point = state.neighbors(&state.coord)[0];
-        state.has_visited[next_point.x as usize][next_point.y as usize] = true;
-        state.coord = next_point;
-        d += 1;
+impl Graph {
+    fn from(grid: Vec<Vec<char>>) -> Graph {
+        let mut ans = Graph {
+            adj: HashMap::new(),
+            deg: HashMap::new(),
+        };
+        const DIRECTIONS: [[i32; 2]; 4] = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+        for (x, row) in grid.iter().enumerate() {
+            for (y, c) in row.iter().enumerate() {
+                if *c == '#' {
+                    continue;
+                }
+                for [dx, dy] in DIRECTIONS {
+                    let new_x = (x as i32 + dx) as usize;
+                    let new_y = (y as i32 + dy) as usize;
+                    if grid[new_x][new_y] != '#' {
+                        let p1 = Point { x, y };
+                        let p2 = Point { x: new_x, y: new_y };
+                        if p1 < p2 {
+                            ans.modify_edge(&p1, &p2, 1, true);
+                        }
+                    }
+                }
+            }
+        }
+        ans
     }
-    if state.coord.x == state.grid.len() as i32 - 1 {
-        return d;
+    fn degree(&self, point: &Point) -> usize {
+        self.adj.get(&point).map(|v| v.len()).unwrap_or(0)
     }
-    let mut ans = -100000000;
-    let current_point = state.coord;
-    for neighbor in state.neighbors(&state.coord) {
-        state.has_visited[neighbor.x as usize][neighbor.y as usize] = true;
-        state.coord = neighbor;
-        ans = cmp::max(ans, dfs(state) + d);
-        state.has_visited[neighbor.x as usize][neighbor.y as usize] = false;
-        state.coord = current_point;
+    fn modify_edge(&mut self, point1: &Point, point2: &Point, weight: usize, to_add: bool) {
+        for point in [point1, point2] {
+            let d = self.degree(point);
+            self.deg.remove_from_vec(d, *point);
+        }
+        if to_add {
+            self.adj.add_to_vec(*point1, (*point2, weight));
+            self.adj.add_to_vec(*point2, (*point1, weight));
+        } else {
+            self.adj.remove_from_vec(*point1, (*point2, weight));
+            self.adj.remove_from_vec(*point2, (*point1, weight));
+        }
+        for point in [point1, point2] {
+            let d = self.degree(point);
+            self.deg.add_to_vec(d, *point);
+        }
     }
-    ans
+
+    fn compress(&mut self) {
+        // repeatedly find edges of degree 2 and remove them in favor of a single edge
+        while !self.deg.get(&2).unwrap().is_empty() {
+            let node = self.deg.get(&2).unwrap()[0];
+            let neighbors: Vec<(Point, usize)> = self
+                .adj
+                .get(&node)
+                .unwrap()
+                .clone()
+                .into_iter()
+                .take(2)
+                .collect();
+            let weight1 = neighbors[0].1;
+            let weight2 = neighbors[1].1;
+            let node1 = neighbors[0].0;
+            let node2 = neighbors[1].0;
+            self.modify_edge(&node1, &node2, weight1 + weight2, true);
+            self.modify_edge(&node1, &node, weight1, false);
+            self.modify_edge(&node2, &node, weight2, false);
+        }
+    }
+    fn dfs(&self, node: &Point, end: &Point, vis: &mut HashMap<Point, bool>) -> Option<usize> {
+        if node == end {
+            return Some(0);
+        }
+        let mut ans: Option<usize> = None;
+        for (neighbor, weight) in &self.adj[node] {
+            if *vis.get(neighbor).unwrap_or(&false) {
+                continue;
+            }
+            vis.insert(*neighbor, true);
+            if let Some(sub) = self.dfs(neighbor, end, vis) {
+                ans = Some(ans.unwrap_or(0).max(weight + sub));
+            }
+            vis.insert(*neighbor, false);
+        }
+        ans
+    }
 }
 
 fn main() {
-    let g: Vec<Vec<char>> = include_str!("../input/input.txt")
+    let mut g: Vec<Vec<char>> = include_str!("../input/input.txt")
         .split("\n")
         .map(|x| x.chars().collect())
         .collect::<Vec<Vec<char>>>();
-    let ans = dfs(&mut State::from(g));
-    println!("{}", ans - 1);
+    g.insert(0, vec!['#'; g[0].len()]);
+    g.push(vec!['#'; g[0].len()]);
+    let start = Point {
+        x: 1,
+        y: g[1].iter().position(|&c| c != '#').unwrap(),
+    };
+    let end = Point {
+        x: g.len() - 2,
+        y: g[g.len() - 2].iter().position(|&c| c != '#').unwrap(),
+    };
+    let mut graph = Graph::from(g);
+    graph.compress();
+    let mut vis = HashMap::new();
+    vis.insert(start, true);
+    let ans = graph.dfs(&start, &end, &mut vis);
+    println!("{:?}", ans.unwrap());
 }

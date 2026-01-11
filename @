@@ -1,0 +1,94 @@
+use std::collections::HashMap;
+
+#[derive(Copy, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+struct Point {
+    y: usize,
+    x: usize,
+}
+
+struct Graph {
+    adj: HashMap<Point, Vec<(Point, usize)>>,
+    deg: HashMap<usize, Vec<Point>>, // maps degrees to list of nodes with that degree
+}
+
+trait HashMapVecExt<T, U> {
+    fn remove_from_vec(&mut self, key: T, val: U);
+    fn add_to_vec(&mut self, key: T, val: U);
+}
+
+impl<T, U> HashMapVecExt<T, U> for HashMap<T, Vec<U>>
+where
+    T: std::hash::Hash + Eq,
+    U: PartialEq + Copy,
+{
+    fn remove_from_vec(&mut self, key: T, val: U) {
+        if let Some(vec) = self.get_mut(&key) {
+            vec.retain(|&x| x != val);
+        }
+    }
+
+    fn add_to_vec(&mut self, key: T, val: U) {
+        if let Some(vec) = self.get_mut(&key) {
+            vec.push(val);
+        }
+    }
+}
+
+impl Graph {
+    fn degree(&self, point: &Point) -> usize {
+        return self.adj.get(&point).unwrap().len();
+    }
+    fn modify_edge(&mut self, point1: &Point, point2: &Point, weight: usize, to_add: bool) {
+        for point in [point1, point2] {
+            let d = self.degree(point);
+            self.deg.remove_from_vec(d, *point);
+        }
+        if to_add {
+            self.adj.add_to_vec(*point1, (*point2, weight));
+            self.adj.add_to_vec(*point2, (*point1, weight));
+        } else {
+            self.adj.remove_from_vec(*point1, (*point2, weight));
+            self.adj.remove_from_vec(*point2, (*point1, weight));
+        }
+        for point in [point1, point2] {
+            let d = self.degree(point);
+            self.deg.add_to_vec(d, *point);
+        }
+    }
+
+    fn compress(&self) {
+        // repeatedly find edges of degree 2 and remove them
+        while !self.deg.get(&2).unwrap().is_empty() {
+            let node = self.deg.get(&2).unwrap()[0];
+            let neighbors: Vec<(Point, usize)> = self
+                .adj
+                .get(&node)
+                .unwrap()
+                .clone()
+                .into_iter()
+                .take(2)
+                .collect();
+            let weight = neighbors[0].1;
+            let node1 = neighbors[0].0;
+            let node2 = neighbors[1].0;
+            self.modify_edge(node1, node2, weight, true);
+        }
+    }
+}
+
+fn main() {
+    let mut g: Vec<Vec<char>> = include_str!("../input/input.txt")
+        .split("\n")
+        .map(|x| x.chars().collect())
+        .collect::<Vec<Vec<char>>>();
+    g.insert(0, vec!['#'; g[0].len()]);
+    g.push(vec!['#'; g[0].len()]);
+    for vec in &g {
+        for c in vec {
+            print!("{c} ")
+        }
+        println!("");
+    }
+    let ans = solve(&g);
+    println!("{}", ans);
+}
