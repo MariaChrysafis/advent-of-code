@@ -11,20 +11,21 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        year: [2023, 2025]
     steps:
     - uses: actions/checkout@v4
     - name: Check formatting
       run: cargo fmt --check
-      working-directory: 2025
+      working-directory: ${{ matrix.year }}
     - name: Clippy
       run: cargo clippy -- -D warnings
-      working-directory: 2025
+      working-directory: ${{ matrix.year }}
     - name: Build
       run: cargo build --verbose
-      working-directory: 2025
+      working-directory: ${{ matrix.year }}
     - name: Run tests
       run: cargo test --verbose
-      working-directory: 2025
+      working-directory: ${{ matrix.year }}
