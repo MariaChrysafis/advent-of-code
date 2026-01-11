@@ -5,9 +5,7 @@ fn main() {
         .split("\n")
         .flat_map(|str| {
             let (node, neighbors) = str.split_once(":").unwrap();
-            neighbors
-                .split_whitespace()
-                .map(move |x| (node, x))
+            neighbors.split_whitespace().map(move |x| (node, x))
         })
         .collect();
     let min_cut = stoer_wagner_min_cut(&graph, |_| Ok::<i32, ()>(1));
