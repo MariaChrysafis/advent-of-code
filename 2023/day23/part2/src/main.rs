@@ -1,4 +1,4 @@
-use std::{collections::HashMap, hash::Hash};
+use std::collections::{HashMap, HashSet};
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 struct Point {
@@ -82,8 +82,7 @@ impl Graph {
 
     fn compress(&mut self) {
         // repeatedly find edges of degree 2 and remove them in favor of a single edge
-        while !self.deg.get(&2).unwrap().is_empty() {
-            let node = self.deg.get(&2).unwrap()[0];
+        while let Some(&node) = self.deg.get(&2).and_then(|v| v.first()) {
             let neighbors: Vec<(Point, usize)> = self
                 .adj
                 .get(&node)
@@ -101,20 +100,20 @@ impl Graph {
             self.modify_edge(&node2, &node, weight2, false);
         }
     }
-    fn dfs(&self, node: &Point, end: &Point, vis: &mut HashMap<Point, bool>) -> Option<usize> {
+    fn dfs(&self, node: &Point, end: &Point, vis: &mut HashSet<Point>) -> Option<usize> {
         if node == end {
             return Some(0);
         }
         let mut ans: Option<usize> = None;
         for (neighbor, weight) in &self.adj[node] {
-            if *vis.get(neighbor).unwrap_or(&false) {
+            if vis.contains(neighbor) {
                 continue;
             }
-            vis.insert(*neighbor, true);
+            vis.insert(*neighbor);
             if let Some(sub) = self.dfs(neighbor, end, vis) {
                 ans = Some(ans.unwrap_or(0).max(weight + sub));
             }
-            vis.insert(*neighbor, false);
+            vis.remove(neighbor);
         }
         ans
     }
@@ -137,8 +136,8 @@ fn main() {
     };
     let mut graph = Graph::from(g);
     graph.compress();
-    let mut vis = HashMap::new();
-    vis.insert(start, true);
+    let mut vis = HashSet::new();
+    vis.insert(start);
     let ans = graph.dfs(&start, &end, &mut vis);
     println!("{:?}", ans.unwrap());
 }
