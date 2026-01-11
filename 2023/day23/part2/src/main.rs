@@ -10,78 +10,57 @@ struct Graph {
     adj: HashMap<Point, Vec<(Point, usize)>>,
 }
 
-trait HashMapVecExt<T, U> {
-    fn remove_from_vec(&mut self, key: T, val: U);
-    fn add_to_vec(&mut self, key: T, val: U);
-}
-
-impl<T, U> HashMapVecExt<T, U> for HashMap<T, Vec<U>>
-where
-    T: std::hash::Hash + Eq,
-    U: PartialEq + Copy,
-{
-    fn remove_from_vec(&mut self, key: T, val: U) {
-        if let Some(vec) = self.get_mut(&key) {
-            vec.retain(|&x| x != val);
-        }
-    }
-
-    fn add_to_vec(&mut self, key: T, val: U) {
-        self.entry(key).or_default().push(val);
-    }
-}
-
 impl Graph {
-    fn from(grid: Vec<Vec<char>>) -> Graph {
-        let mut ans = Graph {
+    fn from(grid: &[Vec<char>]) -> Self {
+        let mut graph = Self {
             adj: HashMap::new(),
         };
-        const DIRECTIONS: [[i32; 2]; 4] = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+        const DIRS: [(i32, i32); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
         for (x, row) in grid.iter().enumerate() {
-            for (y, c) in row.iter().enumerate() {
-                if *c == '#' {
+            for (y, &c) in row.iter().enumerate() {
+                if c == '#' {
                     continue;
                 }
-                for [dx, dy] in DIRECTIONS {
-                    let new_x = (x as i32 + dx) as usize;
-                    let new_y = (y as i32 + dy) as usize;
-                    if grid[new_x][new_y] != '#' {
-                        let p1 = Point { x, y };
-                        let p2 = Point { x: new_x, y: new_y };
+                for (dx, dy) in DIRS {
+                    let (nx, ny) = ((x as i32 + dx) as usize, (y as i32 + dy) as usize);
+                    if grid[nx][ny] != '#' {
+                        let (p1, p2) = (Point { x, y }, Point { x: nx, y: ny });
                         if p1 < p2 {
-                            ans.add_edge(p1, p2, 1);
+                            graph.add_edge(p1, p2, 1);
                         }
                     }
                 }
             }
         }
-        ans
+        graph
     }
+
     fn add_edge(&mut self, p1: Point, p2: Point, weight: usize) {
-        self.adj.add_to_vec(p1, (p2, weight));
-        self.adj.add_to_vec(p2, (p1, weight));
+        self.adj.entry(p1).or_default().push((p2, weight));
+        self.adj.entry(p2).or_default().push((p1, weight));
     }
 
     fn remove_edge(&mut self, p1: Point, p2: Point, weight: usize) {
-        self.adj.remove_from_vec(p1, (p2, weight));
-        self.adj.remove_from_vec(p2, (p1, weight));
-    }
-
-    fn find_degree_2_node(&self) -> Option<Point> {
-        self.adj
-            .iter()
-            .find(|(_, neighbors)| neighbors.len() == 2)
-            .map(|(p, _)| *p)
+        if let Some(v) = self.adj.get_mut(&p1) {
+            v.retain(|&e| e != (p2, weight));
+        }
+        if let Some(v) = self.adj.get_mut(&p2) {
+            v.retain(|&e| e != (p1, weight));
+        }
     }
 
     fn compress(&mut self) {
-        while let Some(node) = self.find_degree_2_node() {
-            let neighbors: Vec<(Point, usize)> = self.adj.remove(&node).unwrap();
-            let (node1, weight1) = neighbors[0];
-            let (node2, weight2) = neighbors[1];
-            self.remove_edge(node1, node, weight1);
-            self.remove_edge(node2, node, weight2);
-            self.add_edge(node1, node2, weight1 + weight2);
+        while let Some(node) = self
+            .adj
+            .iter()
+            .find_map(|(p, n)| (n.len() == 2).then_some(*p))
+        {
+            let [(n1, w1), (n2, w2)] = self.adj.remove(&node).unwrap()[..] else {
+                unreachable!()
+            };
+            self.remove_edge(n1, node, w1);
+            self.remove_edge(n2, node, w2);
+            self.add_edge(n1, n2, w1 + w2);
         }
     }
     fn dfs(&self, node: &Point, end: &Point, vis: &mut HashSet<Point>) -> Option<usize> {
@@ -104,24 +83,27 @@ impl Graph {
 }
 
 fn main() {
-    let mut g: Vec<Vec<char>> = include_str!("../input/input.txt")
-        .split("\n")
-        .map(|x| x.chars().collect())
-        .collect::<Vec<Vec<char>>>();
-    g.insert(0, vec!['#'; g[0].len()]);
-    g.push(vec!['#'; g[0].len()]);
+    let mut grid: Vec<Vec<char>> = include_str!("../input/input.txt")
+        .lines()
+        .map(|line| line.chars().collect())
+        .collect();
+    let width = grid[0].len();
+    grid.insert(0, vec!['#'; width]);
+    grid.push(vec!['#'; width]);
+
+    let find_open = |row: &[char]| row.iter().position(|&c| c != '#').unwrap();
     let start = Point {
         x: 1,
-        y: g[1].iter().position(|&c| c != '#').unwrap(),
+        y: find_open(&grid[1]),
     };
     let end = Point {
-        x: g.len() - 2,
-        y: g[g.len() - 2].iter().position(|&c| c != '#').unwrap(),
+        x: grid.len() - 2,
+        y: find_open(&grid[grid.len() - 2]),
     };
-    let mut graph = Graph::from(g);
+
+    let mut graph = Graph::from(&grid);
     graph.compress();
-    let mut vis = HashSet::new();
-    vis.insert(start);
-    let ans = graph.dfs(&start, &end, &mut vis);
-    println!("{:?}", ans.unwrap());
+
+    let mut vis = HashSet::from([start]);
+    println!("{}", graph.dfs(&start, &end, &mut vis).unwrap());
 }
