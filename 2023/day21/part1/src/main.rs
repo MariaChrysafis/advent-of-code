@@ -13,10 +13,10 @@ fn solve(grid: &Vec<Vec<char>>, point: Point, d: i32) -> Vec<Point> {
             })
             .collect();
     }
-    let mut ans = Vec::new();
-    for point in solve(grid, point, d - 1) {
-        ans.extend(solve(grid, point, 1));
-    }
+    let mut ans: Vec<Point> = solve(grid, point, d - 1)
+        .into_iter()
+        .flat_map(|p| solve(grid, p, 1))
+        .collect();
     ans.sort();
     ans.dedup();
     ans
