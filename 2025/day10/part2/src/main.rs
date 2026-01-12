@@ -1,7 +1,7 @@
 use good_lp::{Expression, Solution, SolverModel, Variable, default_solver};
 
 fn main() {
-    let ans: i32 = include_str!("../input/input.txt")
+    let ans: i32 = include_str!("../../input/input.txt")
         .split("\n")
         .map(|line| {
             let a: Vec<&str> = line.split(" ").collect();

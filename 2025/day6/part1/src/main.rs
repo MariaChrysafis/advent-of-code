@@ -1,5 +1,5 @@
 fn main() {
-    let input: Vec<Vec<&str>> = include_str!("../input/input.txt")
+    let input: Vec<Vec<&str>> = include_str!("../../input/input.txt")
         .split("\n")
         .map(|x: &str| x.split_whitespace().collect())
         .collect();

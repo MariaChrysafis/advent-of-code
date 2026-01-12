@@ -1,5 +1,5 @@
 fn main() {
-    let (inp1, inp2) = include_str!("../input/input.txt")
+    let (inp1, inp2) = include_str!("../../input/input.txt")
         .split_once("\n\n")
         .unwrap();
     let numbers: Vec<i64> = inp2

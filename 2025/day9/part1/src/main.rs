@@ -1,5 +1,5 @@
 fn main() {
-    let positions: Vec<(i64, i64)> = include_str!("../input/input.txt")
+    let positions: Vec<(i64, i64)> = include_str!("../../input/input.txt")
         .lines()
         .map(|x| x.split_once(",").unwrap())
         .map(|x| (x.0.parse::<i64>().unwrap(), x.1.parse::<i64>().unwrap()))

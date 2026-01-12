@@ -4,7 +4,7 @@ use itertools::Itertools;
 const INFINITY: f64 = 100000000000000000.0;
 fn main() {
     // parse the input
-    let input = include_str!("../input/input.txt").lines().map(|line| {
+    let input = include_str!("../../input/input.txt").lines().map(|line| {
         let (pos, dir) = line.split_once("@").unwrap();
         let pos_parts: Vec<f64> = pos.split(",").map(|s| s.trim().parse().unwrap()).collect();
         let dir_parts: Vec<f64> = dir.split(",").map(|s| s.trim().parse().unwrap()).collect();

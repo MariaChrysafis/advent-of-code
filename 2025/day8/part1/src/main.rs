@@ -32,7 +32,7 @@ fn distance(pos1: &[i64], pos2: &[i64]) -> i64 {
     pos1.iter().zip(pos2).map(|(a, b)| (a - b).pow(2)).sum()
 }
 fn main() {
-    let positions: Vec<Vec<i64>> = include_str!("../input/sample.txt")
+    let positions: Vec<Vec<i64>> = include_str!("../../input/sample.txt")
         .lines()
         .map(|x| x.split(',').map(|x| x.parse::<i64>().unwrap()).collect())
         .collect();

@@ -15,7 +15,7 @@ fn max_joltage(str: &str, batteries: usize) -> i64 {
 }
 
 fn main() {
-    let ans: i64 = include_str!("../input/input.txt")
+    let ans: i64 = include_str!("../../input/input.txt")
         .lines()
         .map(|str| max_joltage(str, 12))
         .sum();

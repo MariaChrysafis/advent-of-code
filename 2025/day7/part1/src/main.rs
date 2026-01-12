@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 fn main() {
-    let mut input = include_str!("../input/input.txt")
+    let mut input = include_str!("../../input/input.txt")
         .lines()
         .map(|x| x.chars().collect::<Vec<char>>());
     let mut beams: HashSet<i32> = HashSet::from([input

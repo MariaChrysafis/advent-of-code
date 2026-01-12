@@ -46,7 +46,7 @@ fn move_down(blocks: Vec<Block>) -> Vec<Block> {
     ans
 }
 fn main() {
-    let mut blocks: Vec<Block> = include_str!("../input/input.txt")
+    let mut blocks: Vec<Block> = include_str!("../../input/input.txt")
         .split("\n")
         .map(|str| {
             let (point1, point2) = str.split_once("~").unwrap();

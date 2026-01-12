@@ -15,7 +15,7 @@ fn parse_line(line: &str) -> (Direction, i32) {
 }
 
 fn main() {
-    let moves: Vec<(Direction, i32)> = include_str!("../input/input.txt")
+    let moves: Vec<(Direction, i32)> = include_str!("../../input/input.txt")
         .lines()
         .map(parse_line)
         .collect();

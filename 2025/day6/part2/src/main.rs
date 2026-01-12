@@ -35,7 +35,7 @@ fn solve(input: &[Vec<char>]) -> i64 {
     solve(&input1) + solve(&input2)
 }
 fn main() {
-    let input: Vec<Vec<char>> = include_str!("../input/input.txt")
+    let input: Vec<Vec<char>> = include_str!("../../input/input.txt")
         .split("\n")
         .map(|x| x.chars().collect())
         .collect();

@@ -8,7 +8,7 @@ fn dfs(x: &str, adj: &HashMap<&str, Vec<&str>>, cnt: &mut HashMap<String, i32>) 
 }
 
 fn main() {
-    let adj: HashMap<&str, Vec<&str>> = include_str!("../input/input.txt")
+    let adj: HashMap<&str, Vec<&str>> = include_str!("../../input/input.txt")
         .lines()
         .map(|str| {
             let (node, neighbors) = str.split_once(':').unwrap();

@@ -5,7 +5,7 @@ fn is_valid(i: i64) -> bool {
 }
 
 fn main() {
-    let input = include_str!("../input/input.txt").replace("\n", "");
+    let input = include_str!("../../input/input.txt").replace("\n", "");
     let moves: Vec<&str> = input.split(",").collect();
     let mut count = 0;
     for range in moves {

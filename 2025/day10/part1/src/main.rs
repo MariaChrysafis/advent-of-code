@@ -14,7 +14,7 @@ fn solve(state: usize, vec: &[usize]) -> i32 {
     *dp.get(&0).unwrap()
 }
 fn main() {
-    let ans: i32 = include_str!("../input/sample.txt")
+    let ans: i32 = include_str!("../../input/sample.txt")
         .split("\n")
         .map(|line| {
             let x: Vec<&str> = line.split(" ").collect();

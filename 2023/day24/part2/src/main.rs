@@ -3,7 +3,7 @@ use z3::{Config, Context, Solver};
 
 const DIMENSIONS: usize = 3;
 fn main() {
-    let input = include_str!("../input/input.txt")
+    let input = include_str!("../../input/input.txt")
         .split("\n")
         .map(|str| {
             let (position, direction) = str.split_once("@").unwrap();

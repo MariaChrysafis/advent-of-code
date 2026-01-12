@@ -28,7 +28,7 @@ fn dfs(adj: &Adj, (name, flags): &Node, dp: &mut HashMap<Node, i64>) -> i64 {
 }
 
 fn main() {
-    let adj: Adj = include_str!("../input/input.txt")
+    let adj: Adj = include_str!("../../input/input.txt")
         .lines()
         .filter_map(|l| l.split_once(':'))
         .map(|(n, nb)| (n.into(), nb.split_whitespace().map(Into::into).collect()))

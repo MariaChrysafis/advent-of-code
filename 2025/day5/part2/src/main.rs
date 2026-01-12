@@ -19,7 +19,7 @@ fn union_intervals(mut vec: Vec<(i64, i64)>) -> Vec<(i64, i64)> {
 }
 fn main() {
     let ans: i64 = union_intervals(
-        include_str!("../input/input.txt")
+        include_str!("../../input/input.txt")
             .split_once("\n\n")
             .unwrap()
             .0

@@ -1,5 +1,5 @@
 fn main() {
-    let roll_indices = include_str!("../input/input.txt")
+    let roll_indices = include_str!("../../input/input.txt")
         .lines()
         .enumerate()
         .flat_map(|(i, str)| {

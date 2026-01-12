@@ -78,7 +78,7 @@ impl Graph {
 }
 
 fn main() {
-    let mut grid: Vec<Vec<char>> = include_str!("../input/input.txt")
+    let mut grid: Vec<Vec<char>> = include_str!("../../input/input.txt")
         .lines()
         .map(|line| line.chars().collect())
         .collect();

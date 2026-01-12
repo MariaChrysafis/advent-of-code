@@ -26,7 +26,7 @@ impl Graph {
     }
 }
 fn main() {
-    let positions: Vec<Vec<i64>> = include_str!("../input/input.txt")
+    let positions: Vec<Vec<i64>> = include_str!("../../input/input.txt")
         .lines()
         .map(|x| x.split(',').map(|x| x.parse::<i64>().unwrap()).collect())
         .collect();

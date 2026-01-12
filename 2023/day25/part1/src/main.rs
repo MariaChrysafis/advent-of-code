@@ -1,7 +1,7 @@
 use petgraph::graphmap::UnGraphMap;
 use rustworkx_core::connectivity::stoer_wagner_min_cut;
 fn main() {
-    let graph: UnGraphMap<&str, ()> = include_str!("../input/input.txt")
+    let graph: UnGraphMap<&str, ()> = include_str!("../../input/input.txt")
         .split("\n")
         .flat_map(|str| {
             let (node, neighbors) = str.split_once(":").unwrap();

@@ -14,7 +14,7 @@ fn max_joltage(str: &str) -> u32 {
 }
 
 fn main() {
-    let ans: u32 = include_str!("../input/input.txt")
+    let ans: u32 = include_str!("../../input/input.txt")
         .lines()
         .map(max_joltage)
         .sum::<u32>();

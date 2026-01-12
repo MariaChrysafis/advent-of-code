@@ -48,7 +48,7 @@ fn max_valid_area(input: &[Point], positions: &[i64]) -> u64 {
         .unwrap()
 }
 fn main() {
-    let points: Vec<[i64; 2]> = include_str!("../input/input.txt")
+    let points: Vec<[i64; 2]> = include_str!("../../input/input.txt")
         .lines()
         .map(|x| {
             let (a, b) = x.split_once(",").unwrap();

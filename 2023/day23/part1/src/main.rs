@@ -59,7 +59,7 @@ fn dfs(grid: &Grid, coord: Point, past_points: Vec<Point>) -> i32 {
         + 1
 }
 fn main() {
-    let g: Vec<Vec<char>> = include_str!("../input/input.txt")
+    let g: Vec<Vec<char>> = include_str!("../../input/input.txt")
         .split("\n")
         .map(|x| x.chars().collect())
         .collect::<Vec<Vec<char>>>();
