@@ -1,7 +1,8 @@
 [package]
-name = "part1-23"
+name = "day23-2023-part1"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+geo = "0.32.0"
 geo-types = "0.7.18"
